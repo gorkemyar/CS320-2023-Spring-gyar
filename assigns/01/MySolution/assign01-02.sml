@@ -1,6 +1,23 @@
 use "./../assign01-lib.sml";
 use "./../assign01.sml";
-use "./assign01-01.sml";
+
+
+(* function from the assign 1*)
+fun xlist_size(xs: 'a xlist): int =
+let 
+    fun 
+    loop (xs: 'a xlist, res: int): int =(
+        case xs of
+        xlist_nil => res |
+        xlist_cons(x1, xs) => loop(xs, res +1) |
+        xlist_snoc(xs, x1) => loop(xs, res +1) |
+        xlist_append(xs, ys) => res + loop(xs, 0) + loop(ys,0) |
+        xlist_reverse(xs) => loop(xs, res)
+    )
+in
+    loop(xs,0)
+end
+
 fun xlist_sub(xs: 'a xlist, i0: int): 'a =
 let 
     fun 
@@ -32,7 +49,7 @@ in
 end
 
 (* use "assign01-02.sml"; *)
-
+(* 
 val xs = xlist_nil;
 val xs = xlist_cons(1, xs);
 val xs = xlist_snoc(xs, 2);
@@ -65,4 +82,4 @@ fun test(count: int) =
     then test(count-1)
     else count;
 
-val count = test(xlist_size(xs)-1);
+val count = test(xlist_size(xs)-1); *)
