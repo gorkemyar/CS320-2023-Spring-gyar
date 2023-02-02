@@ -28,14 +28,9 @@ let
         else char2int(strsub(cs,pos)) * pow(10, (strlen(cs) - 1 - pos)) + loop_sum(cs, pos+1);
     
 in 
-    if (strlen(cs) > 0) andalso (strsub(cs,0) = #"-") andalso  (loop_error_check(cs,1) = true)
-    then SOME( ~1 * loop_sum(cs,1))
-    else 
-        if (strlen(cs) > 0) andalso (strsub(cs,0) <> #"-") andalso (loop_error_check(cs,0) = true)
-        then SOME(loop_sum(cs,0))
-        else NONE
+    if (strlen(cs) > 0) andalso (loop_error_check(cs,0) = true)
+    then SOME(loop_sum(cs,0))
+    else NONE
 end
-
-val x = str2int_opt("");
 
 (* use "assign01-04.sml"; *)

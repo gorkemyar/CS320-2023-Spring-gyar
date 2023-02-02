@@ -16,20 +16,3 @@ in
     loop(xs,0)
 end
 
-(* use "assign01-01.sml"; *)
-
-(* val xs = xlist_nil;
-val xs = xlist_cons(1, xs);
-val xs = xlist_snoc(xs, 2);
-val xs = xlist_reverse(xs);
-val xs = xlist_append(xs, xs);
-val xs = xlist_cons(1, xs);
-val xs = xlist_snoc(xs, 2);
-val xs = xlist_append(xs, xs);
-val xs = xlist_cons(1, xs);
-val xs = xlist_snoc(xs, 2);
-
-val list_size = List.length;
-list_size(list_of_xlist(xs));
-xlist_size(xs);  *)
-
