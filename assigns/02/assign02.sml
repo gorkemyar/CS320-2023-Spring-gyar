@@ -23,45 +23,34 @@ fun list_rappend(xs: 'a list, ys: 'a list): 'a list =(
 )
 
 (* ****** ****** *)
-fun
-list_reverse
-(xs: 'a list): 'a list = list_rappend(xs, [])
+fun list_reverse(xs: 'a list): 'a list =
+    list_rappend(xs, [])
 (* ****** ****** *)
 
-fun
-list_quicksort
-(xs: int list): int list =
+fun list_quicksort(xs: int list): int list =
 let
 (* ****** ****** *)
-fun
-qsort(xs: int list): int list =
-(
-case xs of
-nil => nil
-|
-x1 :: xs =>
-let
-val (ys, zs) = qpart(xs, x1)
-val ys = qsort(ys) and zs = qsort(zs)
-in
-  ys @ [x1] @ zs
-end
-)
+fun qsort(xs: int list): int list =(
+  case xs of
+  nil => nil |
+  x1 :: xs =>
+  let
+    val (ys, zs) = qpart(xs, x1)
+    val ys = qsort(ys) and zs = qsort(zs)
+  in
+    ys @ [x1] @ zs
+  end)
 (* ****** ****** *)
 and
-qpart
-(xs: int list, p0: int): int list * int list =
-(
-case xs of
-nil => (nil, nil)
-|
-x1 :: xs =>
-let
-val (ys, zs) = qpart(xs, p0)
-in
-  if x1 <= p0 then (x1 :: ys, zs) else (ys, x1 :: zs)
-end
-)
+qpart(xs: int list, p0: int): int list * int list =(
+  case xs of
+  nil => (nil, nil)|
+  x1 :: xs =>
+    let
+    val (ys, zs) = qpart(xs, p0)
+    in
+      if x1 <= p0 then (x1 :: ys, zs) else (ys, x1 :: zs)
+    end)
 (* ****** ****** *)
 in
   qsort(xs)
