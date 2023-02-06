@@ -8,24 +8,18 @@ use "./assign02-lib.sml";
 *)
 (* ****** ****** *)
 
-fun
-list_append
-(xs: 'a list, ys: 'a list): 'a list =
-(
-case xs of
-  nil => ys
-| x1 :: xs => x1 :: list_append(xs, ys)
+fun list_append(xs: 'a list, ys: 'a list): 'a list =(
+  case xs of
+    nil => ys
+  | x1 :: xs => x1 :: list_append(xs, ys)
 )
 
 (* ****** ****** *)
 
-fun
-list_rappend
-(xs: 'a list, ys: 'a list): 'a list =
-(
-case xs of
-  nil => ys
-| x1 :: xs => list_rappend(xs, x1 :: ys)
+fun list_rappend(xs: 'a list, ys: 'a list): 'a list =(
+  case xs of
+    nil => ys
+  | x1 :: xs => list_rappend(xs, x1 :: ys)
 )
 
 (* ****** ****** *)
