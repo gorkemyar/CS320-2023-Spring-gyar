@@ -49,13 +49,130 @@ int5_sort_nr(xs) for every 5-tuple xs of the type int5.
 *)
 (* ****** ****** *)
 
+
+
+
 fun
 int5_sort_nr(xs: int5): int5 =
 (*
 Please Give your implementation as follows:
 *)
+let
+  val (x1, x2, x3, x4, x5) = xs
+
+in
+  if x1 < x2 then
+    if x2 < x3 then
+      if x3 < x4 then
+        if x4 < x5 then
+          (x1, x2, x3, x4, x5)
+        else
+          if x3 < x5 then
+            (x1, x2, x3, x5, x4)
+          else
+            if x1 < x5 then
+              (x1, x2, x5, x3, x4)
+            else
+              (x5, x1, x2, x3, x4)
+      else
+        if x3 < x5 then
+          if x4 < x5 then
+            (x1, x2, x4, x5, x3)
+          else
+            (x1, x2, x5, x4, x3)
+        else
+          if x1 < x5 then
+            (x1, x2, x5, x3, x4)
+          else
+            (x5, x1, x2, x3, x4)
+    else
+      if x1 < x3 then
+        if x3 < x4 then
+          if x4 < x5 then
+            (x1, x3, x2, x4, x5)
+          else
+            if x3 < x5 then
+              (x1, x3, x2, x5, x4)
+            else
+              if x1 < x5 then
+                (x1, x5, x3, x2, x4)
+              else
+                (x5, x1, x3, x2, x4)
+        else
+          if x3 < x5 then
+            if x4 < x5 then
+              (x1, x4, x5, x3, x2)
+            else
+              (x1, x5, x4, x3, x2)
+          else
+            if x1 < x5 then
+              (x1, x5, x3, x2, x4)
+            else
+              (x5, x1, x3, x2, x4)
+      else
+        if x1 < x4 then
+          if x4 < x5 then
+            (x3, x1, x2, x4, x5)
+          else
+            if x1 < x5 then
+              (x3, x1, x2, x5, x4)
+            else
+              (x3, x5, x1, x2, x4)  
+
+        else  
+          if x1 < x5 then
+            (x3, x4, x1, x2, x5)
+          else
+            (x3, x4, x5, x1, x2)
+  else
+    if x2 < x3 then
+      if x3 < x4 then
+        if x4 < x5 then
+          (x2, x1, x3, x4, x5)
+        else
+          if x3 < x5 then
+            (x2, x1, x3, x5, x4)
+          else
+            if x2 < x5 then
+              (x2, x1, x5, x3, x4)
+            else
+              (x5, x2, x1, x3, x4)
+      else
+        if x3 < x5 then
+          if x4 < x5 then
+            (x2, x4, x5, x3, x1)
+          else
+            (x2, x5, x4, x3, x1)
+        else
+          if x2 < x5 then
+            (x2, x5, x3, x1, x4)
+          else
+            (x5, x2, x3, x1, x4)
+    else
+      if x2 < x4 then
+        if x4 < x5 then
+          (x3, x2, x1, x4, x5)
+        else
+          if x2 < x5 then
+            (x3, x2, x1, x5, x4)
+          else
+            (x3, x5, x2, x1, x4)
+      else
+        if x2 < x5 then
+          (x3, x4, x2, x1, x5)
+        else
+          (x3, x4, x5, x2, x1)
+          
+end
+
+
+val xs1 = (2,3,6,4,1);
+val a = int5_sort_nr(xs1)
+
 
 
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-quiz01-int5_sort_nonrec.sml] *)
+
+(* use "int5_sort_nonrec_test.sml" *)

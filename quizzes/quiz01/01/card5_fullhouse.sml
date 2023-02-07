@@ -172,12 +172,22 @@ fun card5_fullhouse(cs: card5): bool
 //
 *)
 
+
 fun
 card5_fullhouse(cs: card5): bool =
-(*
-Please Give your implementation as follows:
-*)
+(* Please Give your implementation as follows: *)
 
+let 
+  val (c1, c2, c3, c4, c5) = cs
+  val ints = (rank2int(card_rank(c1)),rank2int(card_rank(c2)),rank2int(card_rank(c3)),rank2int(card_rank(c4)),rank2int(card_rank(c5)))
+  val (y1, y2, y3, y4, y5) = int5_sort(ints)
+in 
+  if (y1 = y2 andalso y2 = y3 andalso y4 = y5 ) orelse (y1 = y2 andalso y3 = y4 andalso y4 = y5) then true
+  else false
+end
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-quiz01-card5_fullhouse.sml] *)
+(* use "card5_fullhouse_test.sml"; *)
+
+
