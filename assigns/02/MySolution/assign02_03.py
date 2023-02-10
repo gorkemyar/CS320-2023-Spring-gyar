@@ -25,7 +25,7 @@ def mylist_mergesort(xs):
                     return mylist_cons(xs.cons1, ys), mylist_cons(xs.cons2.cons1, zs)
         else:
             raise Exception("Type Error")
-            
+
     def merge(ys, zs):
         if (type(xs).__name__ ==  'mylist_cons' or type(xs).__name__ == 'mylist_nil'):
             if ys.ctag <= 0:
@@ -40,16 +40,16 @@ def mylist_mergesort(xs):
         else:
             raise Exception("Type Error")
 
-    if xs.ctag <= 0:
-        return mylist_nil()
-    else:
-        if (type(xs).__name__ ==  'mylist_cons' or type(xs).__name__ == 'mylist_nil'):
+    if (type(xs).__name__ ==  'mylist_cons' or type(xs).__name__ == 'mylist_nil'):
+        if xs.ctag <= 0:
+            return mylist_nil()
+        else:
             if xs.cons2.ctag <= 0:
                 return mylist_cons(xs.cons1, mylist_nil())
             else:
                 ys, zs = split(xs.cons2.cons2)
                 return merge(mylist_mergesort(mylist_cons(xs.cons1, ys)), mylist_mergesort(mylist_cons(xs.cons2.cons1,zs)))
-        else:
-            raise Exception("Type Error")
+    else:
+        raise Exception("Type Error")
 
 
