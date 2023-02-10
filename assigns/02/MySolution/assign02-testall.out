@@ -1,4 +1,4 @@
-base) Gorkems-MacBook-Pro:Testing gorkemyar$ python3 assign02_01_test.py
+(base) Gorkems-MacBook-Pro:Testing gorkemyar$ python3 assign02_01_test.py
 ys = (1;2;3;4;5)
 [import ./../assign02.py] is done!
 [import ./../MySolution/assign02_01.py] is done!

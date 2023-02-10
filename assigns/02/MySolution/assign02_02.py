@@ -17,24 +17,20 @@ print("[import ./../assign02.py] is done!")
 
 def mylist_quicksort(xs):
     def qsort(xs):
-        if (type(xs).__name__ ==  'mylist_cons' or type(xs).__name__ == 'mylist_nil'):
-            if (xs.ctag > 0):
-                ys, zs = qpart(xs.cons2, xs.cons1)
-                return mylist_append(qsort(ys), mylist_cons(xs.cons1, qsort(zs)))
-            else:
-                return mylist_nil()
+        if (xs.ctag > 0):
+            ys, zs = qpart(xs.cons2, xs.cons1)
+            return mylist_append(qsort(ys), mylist_cons(xs.cons1, qsort(zs)))
         else:
-            raise Exception("Type Error")
+            return mylist_nil()
+
     def qpart(xs, x1):
-        if (type(xs).__name__ ==  'mylist_cons' or type(xs).__name__ == 'mylist_nil'):
-            if (xs.ctag > 0):
-                ys, zs = qpart(xs.cons2, x1)
-                if (xs.cons1 < x1):
-                    return mylist_cons(xs.cons1, ys), zs
-                else:
-                    return ys, mylist_cons(xs.cons1, zs)
+        if (xs.ctag > 0):
+            ys, zs = qpart(xs.cons2, x1)
+            if (xs.cons1 < x1):
+                return mylist_cons(xs.cons1, ys), zs
             else:
-                return mylist_nil(), mylist_nil()
-        else: 
-            raise Exception("Type Error")
+                return ys, mylist_cons(xs.cons1, zs)
+        else:
+            return mylist_nil(), mylist_nil()
+
     return qsort(xs)
