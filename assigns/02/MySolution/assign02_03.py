@@ -14,30 +14,42 @@ print("[import ./../assign02.py] is done!")
 
 def mylist_mergesort(xs):
     def split(xs):
-        if xs.ctag <= 0:
-            return mylist_nil(), mylist_nil()
-        else:
-            if xs.cons2.ctag <= 0:
-                return mylist_cons(xs.cons1, mylist_nil()), mylist_nil()
+        if (type(xs).__name__ ==  'mylist_cons' or type(xs).__name__ == 'mylist_nil'):
+            if xs.ctag <= 0:
+                return mylist_nil(), mylist_nil()
             else:
-                ys, zs = split(xs.cons2.cons2)
-                return mylist_cons(xs.cons1, ys), mylist_cons(xs.cons2.cons1, zs)
+                if xs.cons2.ctag <= 0:
+                    return mylist_cons(xs.cons1, mylist_nil()), mylist_nil()
+                else:
+                    ys, zs = split(xs.cons2.cons2)
+                    return mylist_cons(xs.cons1, ys), mylist_cons(xs.cons2.cons1, zs)
+        else:
+            raise Exception("Type Error")
+            
     def merge(ys, zs):
-        if ys.ctag <= 0:
-            return zs
-        elif zs.ctag <= 0:
-            return ys
-        else:
-            if (ys.cons1 <= zs.cons1):
-                return mylist_cons(ys.cons1, merge(ys.cons2, zs))
+        if (type(xs).__name__ ==  'mylist_cons' or type(xs).__name__ == 'mylist_nil'):
+            if ys.ctag <= 0:
+                return zs
+            elif zs.ctag <= 0:
+                return ys
             else:
-                return mylist_cons(zs.cons1, merge(ys, zs.cons2))
-    
+                if (ys.cons1 <= zs.cons1):
+                    return mylist_cons(ys.cons1, merge(ys.cons2, zs))
+                else:
+                    return mylist_cons(zs.cons1, merge(ys, zs.cons2))
+        else:
+            raise Exception("Type Error")
+
     if xs.ctag <= 0:
         return mylist_nil()
     else:
-        if xs.cons2.ctag <= 0:
-            return mylist_cons(xs.cons1, mylist_nil())
+        if (type(xs).__name__ ==  'mylist_cons' or type(xs).__name__ == 'mylist_nil'):
+            if xs.cons2.ctag <= 0:
+                return mylist_cons(xs.cons1, mylist_nil())
+            else:
+                ys, zs = split(xs.cons2.cons2)
+                return merge(mylist_mergesort(mylist_cons(xs.cons1, ys)), mylist_mergesort(mylist_cons(xs.cons2.cons1,zs)))
         else:
-            ys, zs = split(xs.cons2.cons2)
-            return merge(mylist_mergesort(mylist_cons(xs.cons1, ys)), mylist_mergesort(mylist_cons(xs.cons2.cons1,zs)))
+            raise Exception("Type Error")
+
+

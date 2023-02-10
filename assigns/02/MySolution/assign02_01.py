@@ -39,16 +39,3 @@ def mylist_reverse(xs):
             return mylist_nil()
     else:
         raise Exception("Type Error")
-
-# xs = mylist_nil()
-# xs = mylist_cons(3, xs)
-# xs = mylist_cons(2, xs)
-# xs = mylist_cons(1, xs)
-
-# ys = mylist_rappend(xs, xs)
-# xs = mylist_append(xs, xs)
-# rs = mylist_reverse(xs)
-
-# print("xs = ",end=''); mylist_print(xs); print()
-# print("ys = ",end=''); mylist_print(ys); print()
-# print("rs = ",end=''); mylist_print(rs); print()
