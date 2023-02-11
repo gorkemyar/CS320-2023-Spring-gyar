@@ -19,8 +19,25 @@ list_range(0, 5) = [0,1,2,3,4]
 Please give a tail-recusive implementation of
 the list_range function
 //
-fun list_range(start: int, finish: int): int list
 *)
+
+fun list_range(start: int, finish: int): int list =
+let
+    fun loop(start: int, finish: int, res: int list): int list =
+        if start >= finish
+        then res
+        else loop(start+1, finish, res@[start]) 
+in 
+    loop(start, finish, [])
+end
+
+(* 
+val a = list_range(1, 1);
+val b = list_range(2, 1);
+val c = list_range(1, 5); *)
+
+(* use "assign03-02-test.sml"; *)
+(* use "assign03-02.sml"; *)
 
 (* ****** ****** *)
 
