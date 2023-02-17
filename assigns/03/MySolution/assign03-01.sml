@@ -36,3 +36,4 @@ end
 (* end of [CS320-2023-Spring-assign03-01.sml] *)
 
 (* use "assign03-01-test.sml"; *)
+(* use "assign03-01.sml"; *)
