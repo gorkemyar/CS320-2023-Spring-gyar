@@ -24,45 +24,41 @@ exception ListSubscript320
 (* ****** ****** *)
 
 fun
-assert320
-(claim: bool): unit =
-if claim
-  then () else raise ERROR320(NONE)
+assert320(claim: bool): unit =
+  if claim
+  then () 
+  else raise ERROR320(NONE)
 (* end of [assert320] *)
 
 fun
-assert320_some
-(claim: bool, errmsg: string): unit =
-if claim
-  then () else raise ERROR320(SOME(errmsg))
+assert320_some(claim: bool, errmsg: string): unit =
+  if claim
+  then () 
+  else raise ERROR320(SOME(errmsg))
 (* end of [assert320_some] *)
 
 (* ****** ****** *)
 
-val abs_int =
-fn(i0: int) =>
-if i0 >= 0 then i0 else ~i0
+val abs_int = fn(i0: int) =>
+  if i0 >= 0 
+  then i0 
+  else ~i0
 
 (* ****** ****** *)
 
 fun
-pow_int_int
-(x: int, y: int): int =
-if y <= 0
-then 1 else x * pow_int_int(x, y-1)
+pow_int_int(x: int, y: int): int =
+  if y <= 0
+  then 1 
+  else x * pow_int_int(x, y-1)
 
 (* ****** ****** *)
 
 fun
-char_of_digit
-(digit: int): char =
+char_of_digit(digit: int): char =
 let
-  val () =
-  assert320_some
-  (digit >= 0, "int2char")
-  val () =
-  assert320_some
-  (digit <= 9, "int2char")
+  val () = assert320_some(digit >= 0, "int2char")
+  val () = assert320_some(digit <= 9, "int2char")
 in
   chr(ord(#"0") + digit)
 end (* end of [char_of_digit] *)
@@ -70,60 +66,82 @@ end (* end of [char_of_digit] *)
 (* ****** ****** *)
 
 fun
-print_int(x: int) = print(Int.toString(x))
+print_int(x: int) = 
+  print(Int.toString(x))
+
 fun
-print_char(c: char) = print(String.str(c))
+print_char(c: char) = 
+  print(String.str(c))
 
 (* ****** ****** *)
 
 fun
-list_is_nil(xs: 'a list): bool =
-(
-case xs of nil => true | _ :: _ => false)
+list_is_nil(xs: 'a list): bool = (
+  case xs of 
+  nil => true 
+  | _ :: _ => false
+)
+
 fun
-list_is_cons(xs: 'a list): bool =
-(
-case xs of nil => false | _ :: _ => true)
+list_is_cons(xs: 'a list): bool = (
+  case xs of 
+  nil => false 
+  | _ :: _ => true
+)
 
 (* ****** ****** *)
 
 fun
-list_unnil(xs: 'a list): unit =
-(
-case xs of nil => () | _ => raise ConsMatch320)
+list_unnil(xs: 'a list): unit = (
+  case xs of 
+  nil => () 
+  | _ => raise ConsMatch320
+)
+
 fun
-list_uncons(xs: 'a list): 'a * 'a list =
+  list_uncons(xs: 'a list): 'a * 'a list =
 (
-case xs of
-x1 :: xs => (x1, xs) | _ => raise ConsMatch320)
+  case xs of
+  x1 :: xs => (x1, xs) 
+  | _ => raise ConsMatch320
+)
 
 (* ****** ****** *)
 
 fun
-optn_is_none(xs: 'a optn): bool =
-(
-case xs of NONE => true | SOME _ => false)
+optn_is_none(xs: 'a optn): bool = (
+  case xs of 
+  NONE => true 
+  | SOME _ => false
+)
+
 fun
-optn_is_some(xs: 'a optn): bool =
-(
-case xs of NONE => false | SOME _ => true)
+optn_is_some(xs: 'a optn): bool = (
+  case xs of 
+  NONE => false
+  | SOME _ => true
+)
 
 (* ****** ****** *)
 
 fun
-optn_unnone(xs: 'a optn): unit =
-(
-case xs of NONE => () | _ => raise ConsMatch320)
+optn_unnone(xs: 'a optn): unit = (
+  case xs of 
+  NONE => () 
+  | _ => raise ConsMatch320
+)
+
 fun
-optn_unsome(xs: 'a optn): 'a =
-(
-case xs of SOME x0 => x0 | _ => raise ConsMatch320)
+optn_unsome(xs: 'a optn): 'a = (
+  case xs of 
+  SOME x0 => x0 
+  | _ => raise ConsMatch320
+)
 
 (* ****** ****** *)
 
 fun
-list_length
-(xs: 'a list): int =
+list_length(xs: 'a list): int =
 let
   fun
   loop
@@ -138,68 +156,54 @@ end (* end of [list_length(xs)]: let *)
 (* ****** ****** *)
 
 fun
-list_map
-(xs: 'a list, fopr: 'a -> 'b): 'b list =
-(
-case xs of
-  nil => nil
-| x1 :: xs => fopr(x1) :: list_map(xs, fopr)
+list_map(xs: 'a list, fopr: 'a -> 'b): 'b list = (
+  case xs of
+    nil => nil
+    | x1 :: xs => fopr(x1) :: list_map(xs, fopr)
 )
 
 (* ****** ****** *)
 
 fun
-list_filter
-(xs: 'a list, test: 'a -> bool): 'a list =
-(
-case xs of
-  nil => nil
-| x1 :: xs =>
-  if test(x1)
-  then x1 :: list_filter(xs, test) else list_filter(xs, test)
+list_filter(xs: 'a list, test: 'a -> bool): 'a list = (
+  case xs of
+    nil => nil
+    | x1 :: xs =>
+      if test(x1)
+      then x1 :: list_filter(xs, test) 
+      else list_filter(xs, test)
 )
 
 (* ****** ****** *)
 
 fun
-list_reduce_left
-( xs: 'a list
-, r0: 'r, fopr: 'r * 'a -> 'r): 'r =
-(
-case xs of
-  nil => r0
-| x1 :: xs =>
-  list_reduce_left(xs, fopr(r0, x1), fopr)
+list_reduce_left( xs: 'a list, r0: 'r, fopr: 'r * 'a -> 'r): 'r = (
+  case xs of
+    nil => r0
+    | x1 :: xs => list_reduce_left(xs, fopr(r0, x1), fopr)
 )
 
 (* ****** ****** *)
 
 fun
-list_reduce_right
-( xs: 'a list
-, r0: 'r, fopr: 'a * 'r -> 'r): 'r =
-(
-case xs of
-  nil => r0
-| x1 :: xs =>
-  fopr(x1, list_reduce_right(xs, r0, fopr))
+list_reduce_right( xs: 'a list, r0: 'r, fopr: 'a * 'r -> 'r): 'r = (
+  case xs of
+    nil => r0
+    | x1 :: xs => fopr(x1, list_reduce_right(xs, r0, fopr))
 )
   
 (* ****** ****** *)
 
-val
-list_append = (* a.k.a. @ *)
+val list_append = (* a.k.a. @ *)
 fn(xs: 'a list, ys: 'a list) =>
-list_reduce_right(xs, ys, op::)
+  list_reduce_right(xs, ys, op::)
 
-val
-list_concat = (* 'flatten' *)
+val list_concat = (* 'flatten' *)
 fn(xss: 'a list list) =>
-list_reduce_right(xss, [], op@)
+  list_reduce_right(xss, [], op@)
 
 (* ****** ****** *)
-val
-list_extend =
+val list_extend =
 fn(xs, x0) => list_append(xs, [x0])
 (* ****** ****** *)
 
@@ -211,7 +215,7 @@ val list_foldright = list_reduce_right
 val
 list_reverse = (* a.k.a. List.rev *)
 fn(xs: 'a list) =>
-list_reduce_left([], xs, fn(r, x) => x :: r)
+list_reduce_left(xs, [], fn(r, x) => x :: r)
 val
 list_rappend =
 fn(xs: 'a list, ys: 'a list) =>
@@ -219,8 +223,7 @@ list_reduce_left(ys, xs, fn(r, x) => x :: r)
 
 (* ****** ****** *)
 
-val
-list_foreach = (* a.k.a. 'list_app' *)
+val list_foreach = (* a.k.a. 'list_app' *)
 fn
 ( xs: 'a list
 , work: 'a -> unit) =>
