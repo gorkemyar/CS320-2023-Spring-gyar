@@ -34,12 +34,30 @@ type
 'xs * ('x0 -> bool) -> bool
 (* ****** ****** *)
 
-(*
+
 fun
-forall_to_exists
-(forall: ('xs,'x0)forall_t): ('xs,'x0)exists_t = ...
-*)
+forall_to_exists(forall: ('xs,'x0)forall_t): ('xs,'x0)exists_t = 
+    fn(xs: 'xs, test: 'x0 -> bool) => not(forall(xs, fn(x0) => not(test(x0))))
+
 
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-assign04-03.sml] *)
+
+(* use "assign04-03-test.sml"; *)
+(* use "assign04-03.sml"; *)
+
+(*
+fun
+forall_to_exists(forall: ('xs,'x0)forall_t): ('xs,'x0)exists_t = 
+    fn(xs: 'xs, test: 'x0 -> bool) =>
+    let 
+        val exist = 
+        foreach_to_foldleft(forall_to_foreach(forall))
+        (xs, false, 
+        fn(res, x0) => (res orelse test(x0)))
+    in
+    exist
+    end
+
+*)
