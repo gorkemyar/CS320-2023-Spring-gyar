@@ -26,8 +26,6 @@ returns a list of boards consisting of all the solutions to the puzzle.
 type board_t =
 int * int * int * int * int * int * int * int
 
-
-
 val board_get = 
 fn (bd: board_t, i: int) =>
 let 
@@ -47,7 +45,7 @@ end
 
 val board_set = 
 fn (bd: board_t, i: int, j:int) =>
-let
+(let
   val (x0, x1, x2, x3, x4, x5, x6, x7) = bd
 in
   if i = 0 then let
@@ -67,7 +65,7 @@ in
   end else if i = 7 then let
     val x7 = j in (x0, x1, x2, x3, x4, x5, x6, x7)
   end else bd 
-end 
+end ): board_t
 
 val abs = 
 fn(x: int) =>
@@ -87,33 +85,82 @@ int1_foldright(i, true, fn(x0: int, res: bool) =>
     res andalso safety_test1(i0, j0, x0, board_get(bd, x0))
 )
 
-fun
-queen8_puzzle_solve(): board_t =
-let 
-    val bd = (0, 0, 0, 0, 0, 0, 0, 0)
-    exception NotFound
-    exception Found of int
+exception NotFound
+exception Found of int
+
+val find_column = fn (row: int, col_default: int, bd: board_t, N: int) =>
+    int1_foldleft(N, ~1, fn(res: int, col: int) =>
+    if col > col_default
+    then
+        if safety_test2(row, col, bd, row-1)
+        then raise Found col
+        else res
+    else res
+)
+(* find_column(row, -1, bd, 8) *)
+
+val find_all_possible_columns = fn(row: int, bd: board_t, N: int) =>
+let
+    val col_default = ref(0)
 in
-    int1_foldright(8, 0, fn(res: int, row1: int) =>
-
-        int1_foldleft(row1 - 1, 0, fn(res: int, col1 int) =>
-            if safety_test2(row1, col1, bd, row1-1)
-
-            then 
-            let
-                val bd1 = board_set(bd, row1, col1)
-            in
-                int1_foldleft(8, -1, fn(res: bool, col: int) =>
-                if safety_test2(row2, col, bd1, row2-1)
-                then ()
-                else ()
-                )
-            end
-            else ()
-        )
-    ) 
-
+int1_foldleft(N, [], fn(r0: board_t list, col: int) =>  
+    if !col_default <> ~1
+    then
+        let 
+            val tmp = find_column(row, !col_default, bd, N)
+        in
+            col_default := tmp;
+            (r0)
+        end
+        handle Found i => 
+        let
+            val bd1 = board_set(bd, row, i)
+        in
+        (col_default := i; bd1::r0)
+        end
+    else r0
+)
 end
+
+
+
+fun print_dots (i: int) =
+  if i > 0 then (print ". "; print_dots (i-1)) else ()
+
+fun print_row (i: int) =
+let 
+  val () = print_dots (i); 
+  val () = print "Q "; 
+  val () = print_dots (7-i); 
+  val () = print "\n"; 
+in 
+    true
+end
+
+fun print_board (bd: board_t) =
+let 
+    val (x0, x1, x2, x3, x4, x5, x6, x7) = bd
+in
+    (print_row (x0); print_row (x1); print_row (x2); print_row (x3);
+    print_row (x4); print_row (x5); print_row (x6); print_row (x7);  true)
+end
+
+
+fun
+queen8_puzzle_solve(): board_t list =
+let 
+    val bds = [(~1, ~1, ~1, ~1, ~1, ~1, ~1, ~1)]
+in
+    int1_foldleft(8, [], fn(r0: board_t list, row: int) => 
+    let
+    val res = list_foldleft(bds, [], fn(r0, bd) => 
+    (print("---------\n"); print_int(row); print("\n"); print_board(bd); print("----------\n"); find_all_possible_columns(row, bd, 8)@r0))
+    in 
+        res
+    end
+    )
+end 
+
 
 
 (* ****** ****** *)
@@ -151,4 +198,5 @@ let
 in
     print_row (x0); print_row (x1); print_row (x2); print_row (x3);
     print_row (x4); print_row (x5); print_row (x6); print_row (x7);  
-end *)
+end
+*)
