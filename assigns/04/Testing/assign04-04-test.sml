@@ -30,10 +30,10 @@ fn() =>
 let
 val
 print_row =
-fn(i) =>(
+fn(i) =>
+(
 int1_foreach
-(8, fn(j) => if i = j then print"Q " else print". "); print"\n")
-
+(N, fn(j) => if i = j+1 then print"Q " else print". "); print"\n")
 val
 print_board = (fn(bd) => board_foreach(bd, fn(i) => print_row(i)))
 in
@@ -49,8 +49,8 @@ val nsol = queen8_puzzle_solve_show()
 
 (* ****** ****** *)
 
-(* val ( ) =
-assert320_some(nsol = 92, "assign04-04-test:1") *)
+val ( ) =
+assert320_some(nsol = 92, "assign04-04-test:1")
 
 (* ****** ****** *)
 val () = print("Assign04-04-test passed: Congradulations!\n")
