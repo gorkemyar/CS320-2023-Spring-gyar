@@ -26,6 +26,29 @@ returns a list of boards consisting of all the solutions to the puzzle.
 type board_t =
 int * int * int * int * int * int * int * int
 
+
+fun print_dots (i: int) =
+  if i > 0 then (print ". "; print_dots (i-1)) else ()
+
+fun print_row (i: int) =
+let 
+  val () = print_dots (i); 
+  val () = print "Q "; 
+  val () = print_dots (7-i); 
+  val () = print "\n"; 
+in 
+    true
+end
+
+fun print_board (bd: board_t) =
+let 
+    val (x0, x1, x2, x3, x4, x5, x6, x7) = bd
+in
+    (print_row (x0); print_row (x1); print_row (x2); print_row (x3);
+    print_row (x4); print_row (x5); print_row (x6); print_row (x7);  true)
+end
+
+
 val board_get = 
 fn (bd: board_t, i: int) =>
 let 
@@ -92,19 +115,19 @@ val find_column = fn (row: int, col_default: int, bd: board_t, N: int) =>
     int1_foldleft(N, ~1, fn(res: int, col: int) =>
     if col > col_default
     then
-        if safety_test2(row, col, bd, row-1)
-        then raise Found col
-        else res
-    else res
+        if safety_test2(row, col, bd, row)
+        then (raise Found col)
+        else N + 1
+    else N + 1
 )
 (* find_column(row, -1, bd, 8) *)
 
 val find_all_possible_columns = fn(row: int, bd: board_t, N: int) =>
 let
-    val col_default = ref(0)
+    val col_default = ref(~1)
 in
 int1_foldleft(N, [], fn(r0: board_t list, col: int) =>  
-    if !col_default <> ~1
+    if !col_default <> N+1
     then
         let 
             val tmp = find_column(row, !col_default, bd, N)
@@ -123,43 +146,21 @@ int1_foldleft(N, [], fn(r0: board_t list, col: int) =>
 end
 
 
-
-fun print_dots (i: int) =
-  if i > 0 then (print ". "; print_dots (i-1)) else ()
-
-fun print_row (i: int) =
-let 
-  val () = print_dots (i); 
-  val () = print "Q "; 
-  val () = print_dots (7-i); 
-  val () = print "\n"; 
-in 
-    true
-end
-
-fun print_board (bd: board_t) =
-let 
-    val (x0, x1, x2, x3, x4, x5, x6, x7) = bd
-in
-    (print_row (x0); print_row (x1); print_row (x2); print_row (x3);
-    print_row (x4); print_row (x5); print_row (x6); print_row (x7);  true)
-end
-
-
 fun
 queen8_puzzle_solve(): board_t list =
 let 
-    val bds = [(~1, ~1, ~1, ~1, ~1, ~1, ~1, ~1)]
+    val bds = [(0, 0, 0, 0, 0, 0, 0, 0)]
 in
-    int1_foldleft(8, [], fn(r0: board_t list, row: int) => 
+    int1_foldleft(8, bds, fn(r0: board_t list, row: int) => 
     let
-    val res = list_foldleft(bds, [], fn(r0, bd) => 
-    (print("---------\n"); print_int(row); print("\n"); print_board(bd); print("----------\n"); find_all_possible_columns(row, bd, 8)@r0))
+    val res = list_foldleft(r0, [], fn(r0, bd) => 
+    (find_all_possible_columns(row, bd, 8)@r0))
     in 
         res
     end
     )
 end 
+
 
 
 
