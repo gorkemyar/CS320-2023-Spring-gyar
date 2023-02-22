@@ -1,5 +1,10 @@
 use "./../../../mysmlib/mysmlib-cls.sml";
 
+(* 
+name: gorkem yar
+id : U31957122
+*)
+
 val strlen =
 foreach_to_length(string_foreach)
 val strsub =
@@ -27,6 +32,6 @@ val () = assert320(quiz02_01("$abb^cccdddd")(#"X") = 0)
 val () = assert320(quiz02_01("$abb^cccdddd")(#"Y") = 0)
 val () = assert320(quiz02_01("$abb^cccdddd")(#"Z") = 0)
 val () = assert320(quiz02_01("$abb^cccdddd")(#"$") = 1)
-val () = assert320(quiz02_01("$abb^cccdddd")(#"^") = 1) *)
+val () = assert320(quiz02_01("$abb^cccdddd")(#"^") = 1)  *)
 
 (* use "quiz02-01.sml"; *)
