@@ -66,6 +66,18 @@ class fnlist_cons(fnlist):
         return self.cons2
 # end-of-class(fnlist_cons)
 
+def fnlist_print(xs):
+    nx = 0
+    sep = ";"
+    print("[",end='')
+    while(xs.ctag > 0):
+        if (nx > 0):
+            print(sep,end='')        
+        print(xs.cons1,end='')
+        nx = nx + 1; xs = xs.cons2
+    print("]", end='')
+# end-of-[fnlist_print]
+
 def fnlist_foreach(xs, work_func):
     while(xs.ctag > 0):
         x0 = xs.cons1
@@ -197,6 +209,20 @@ def rforeach_to_foldright(rforeach):
         rforeach(xs, work_func)
         return res
     return foldright # foreach-function is turned into foldleft-function
+
+###########################################################################
+
+def foreach_to_iforeach(foreach):
+    def iforeach(xs, iwork_func):
+        i0 = 0
+        def work_func(x0):
+            nonlocal i0
+            iwork_func(i0, x0)
+            i0 = i0 + 1
+            return None
+        foreach(xs, work_func)
+        return None
+    return iforeach # foreach-function is turned into iforeach-function
 
 ###########################################################################
 
