@@ -116,8 +116,6 @@ int1_foldright(i, true, fn(x0: int, res: bool) =>
     res andalso safety_test1(i0, j0, x0, board_get(bd, x0))
 )
 
-
-
 val find_column = fn (row: int, col_default: int, bd: board_t, N: int) =>
     int1_foldleft(N+1, ~1, fn(res: int, col: int) =>
     if col > col_default
@@ -159,8 +157,8 @@ let
 in
     int1_foldleft(N, bds, fn(r0: board_t list, row: int) => 
     let
-    val res = list_foldleft(r0, [], fn(r0, bd) => 
-    (find_all_possible_columns(row, bd, N)@r0))
+    val res = list_foldleft(r0, [], fn(r1, bd) => 
+    (find_all_possible_columns(row, bd, N)@r1))
     in 
         res
     end
