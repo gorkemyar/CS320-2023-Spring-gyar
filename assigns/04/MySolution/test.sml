@@ -1,5 +1,10 @@
 
 
-val a = (1,2,3,4,5)
+val a = 1::2::3::nil
 
-val b = a+1
+
+val [x1,x2,x3] = a
+
+
+
+(* use "test.sml"; *)
