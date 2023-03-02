@@ -83,13 +83,6 @@ in
 end
 
 
-val a0 = magic_triangle(0)
-val a1 = magic_triangle(1)
-val a2 = magic_triangle(2)
-val a3 = magic_triangle(3)
-val a4 = magic_triangle(4)
-val a5 = magic_triangle(5) 
-
 (* use "magic_triangle.sml"; *)
 
 (* ****** ****** *)

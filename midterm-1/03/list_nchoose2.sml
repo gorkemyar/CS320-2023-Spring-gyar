@@ -40,9 +40,6 @@ list_nchoose2(xs: int list): (int * int) list =
         )
 
 
-val a1 = list_nchoose2([1,3,2])
-val a2 = list_nchoose2([3,2,1])
-val a3 = list_nchoose2([3,2,1,4])
 
 (* ****** ****** *)
 

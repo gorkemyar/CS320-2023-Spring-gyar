@@ -49,7 +49,4 @@ list_averages(xs: real list): real list =
             )   
     end 
 
-val a = list_averages([1.0,2.0,3.0]) 
-val b = list_averages([1.0,2.0,3.0,4.0])
-val c = list_averages([])
 (* use "list_averages.sml"; *)
