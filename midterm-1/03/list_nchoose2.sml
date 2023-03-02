@@ -28,11 +28,24 @@ is insignificant.
 
 (* ****** ****** *)
 
-(*
+
 fun
-list_nchoose2(xs: int list): (int * int) list = ...
-*)
+list_nchoose2(xs: int list): (int * int) list = 
+    list_foldleft(xs, [], fn(r0, x0) =>
+        r0@list_foldleft(xs, [], fn (r1, x1) =>
+            if x0 < x1 
+            then r1@[(x0,x1)]
+            else r1
+            )
+        )
+
+
+val a1 = list_nchoose2([1,3,2])
+val a2 = list_nchoose2([3,2,1])
+val a3 = list_nchoose2([3,2,1,4])
 
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm1-list_nchoose2.sml] *)
+
+(* use "list_nchoose2.sml"; *)

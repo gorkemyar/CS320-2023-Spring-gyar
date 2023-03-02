@@ -33,3 +33,35 @@ list_pairing
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm1-list_pairing.sml] *)
+
+
+fun
+list_pairing
+(xs: 'a list): ('a * 'a) list * 'a option = 
+    let
+        val last = ref NONE
+
+        fun
+        loop(xs: 'a list): ('a * 'a) list =
+            case xs of
+            nil => nil
+            | x1::xs =>
+                let
+                    val xs_reverse = list_reverse(xs)
+                in
+                    case xs_reverse of 
+                    nil => (last := SOME(x1); nil)
+                    | x2::xs => 
+                        let 
+                            val xs_new = list_reverse(xs)
+                        in
+                            (x1, x2)::loop(xs_new)
+                        end
+                end
+    in
+        (loop(xs), !last)
+    end
+
+
+(* use "list_pairing.sml"; *)
+(* use "midterm1-02-test.sml"; *)

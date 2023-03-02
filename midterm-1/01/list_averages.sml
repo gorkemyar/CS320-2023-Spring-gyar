@@ -37,3 +37,19 @@ list_averages(xs: real list): real list = ...
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm1-list_averages.sml] *)
+
+fun
+list_averages(xs: real list): real list = 
+    let 
+        val sum = ref 0.0
+        val count = ref 0.0;
+    in
+        list_map(xs, 
+            fn(x0) => (sum := !sum + x0; count := !count + 1.0; (!sum) / (!count))
+            )   
+    end 
+
+val a = list_averages([1.0,2.0,3.0]) 
+val b = list_averages([1.0,2.0,3.0,4.0])
+val c = list_averages([])
+(* use "list_averages.sml"; *)

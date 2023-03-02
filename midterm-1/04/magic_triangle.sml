@@ -57,10 +57,40 @@ the previous.
 
 (* ****** ****** *)
 
-(*
+
 fun
-magic_triangle (n : int) : int list list = ...
-*)
+magic_triangle (n : int) : int list list = 
+let
+  val res = ref []
+in
+  if n = 0
+  then [[1]]
+  else
+    (int1_foldleft(n+1, [[1]], fn(r0, x0) =>
+      let
+          val pre = ref 0
+          val ans = ref 0
+      in 
+       (res := (!res)@r0; [
+        list_map(hd(r0), fn(x1) =>
+          (ans := !pre + x1;
+           pre := x1;
+            !ans)
+        )@[1]])
+      end 
+    ); !res)
+
+end
+
+
+val a0 = magic_triangle(0)
+val a1 = magic_triangle(1)
+val a2 = magic_triangle(2)
+val a3 = magic_triangle(3)
+val a4 = magic_triangle(4)
+val a5 = magic_triangle(5) 
+
+(* use "magic_triangle.sml"; *)
 
 (* ****** ****** *)
 
