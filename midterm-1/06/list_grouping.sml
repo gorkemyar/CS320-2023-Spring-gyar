@@ -87,7 +87,7 @@ in
                 val tmp_count = !count
             in
                 ( count := 1; pre := x0;
-                  r0@[(tmp_count, tmp_val)])
+                  (tmp_count, tmp_val)::r0)
             end
         )
         else (count := !count + 1; r0)
@@ -95,57 +95,14 @@ in
 end
 
 
-
-(* fun list_grouping(xs: int list): (int * int) list = 
-    let
-        fun
-        loop(xs: (int * int)list, key: int, res: (int * int) list): (int * int) list =
-        case xs of
-        nil => res@[(1, key)]
-        | x1::xs =>
-            if #2 x1 = key
-            then res@[(#1 x1 + 1, key)]@xs
-            else loop(xs, key, res@[x1])
-    in
-        list_foldleft(xs, [], fn(r0,x0) =>
-            loop(r0, x0, []))
-    end *)
-         
-(* fun list_grouping(xs: int list): (int * int) list = 
-    let
-        fun
-        checkExistence(xs: (int * int)list, key: int ): bool =
-        case xs of
-        nil => false
-        | x1::xs =>
-            if #2 x1 = key
-            then true
-            else checkExistence(xs, key)
-        
-        fun
-        addToList(xs: int list, key: int, count: int): (int * int) =
-        case xs of
-        nil => (count, key)
-        | x1::xs =>
-            if x1 = key
-            then addToList(xs, key, count+1)
-            else addToList(xs, key, count)
-    in
-        list_foldleft(xs, [], fn(r0,x0) =>
-            if checkExistence(r0, x0)
-            then r0
-            else r0@[addToList(xs,x0, 0)]
-        )
-    end *)
-
 (* ****** ****** *)
 
 (*
 Some testing code:
-*)
-val N = 100000
-val nxs = list_grouping(int1_map_list(N, fn i => N-i))
 
+val N = 1000000
+val nxs = list_grouping(int1_map_list(N, fn i => N-i))
+*)
 (* ****** ****** *)
 
 (*
@@ -162,3 +119,4 @@ val nxs = list_grouping(int1_map_list(N, fn i => N-i))
 (* end of [CS320-2023-Spring-midterm1-list_grouping.sml] *)
 
 (* use "list_grouping.sml"; *)
+(* use "midterm1-06-test.sml"; *)
