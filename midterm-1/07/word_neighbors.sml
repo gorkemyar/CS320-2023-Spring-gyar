@@ -66,6 +66,43 @@ string_imap_list =
 fn(cs, ifopr) =>
 foreach_to_map_list(string_iforeach)(cs, ifopr)
 
+
+
+val word_neighbors = fn(word: string) =>
+let
+    val len = string_length(word)
+    val ans = ref []
+in
+    (string_iforeach(word, 
+        fn(i, x0) =>
+            ans := (!ans)
+            @string_foldleft(AB, [], 
+            fn(r1, x1) =>
+                if x0 <> x1
+                then r1@[
+
+                    string_implode(
+                        int1_foldleft(i, [], fn(res, elem) => 
+                            res@[strsub(word, elem)]) 
+
+                        @ [x1]
+
+                        @ int1_foldleft(len-i-1, [], fn(res, elem) => 
+                            res@[strsub(word, elem + i +1)]
+                    ))
+                ]
+                else r1
+            )
+        );
+    !ans)
+end
+
+val a = word_neighbors("aaa")
+
+
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm1-word_neighbors.sml] *)
+
+(* use "word_neighbors.sml"; *)
+(* use "midterm1-07-test.sml"; *)

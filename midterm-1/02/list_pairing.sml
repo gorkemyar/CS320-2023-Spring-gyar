@@ -37,31 +37,42 @@ list_pairing
 
 fun
 list_pairing
-(xs: 'a list): ('a * 'a) list * 'a option = 
-    let
-        val last = ref NONE
-
-        fun
-        loop(xs: 'a list): ('a * 'a) list =
-            case xs of
+(xs: 'a list): ('a * 'a) list * 'a option =
+let 
+    
+    val size = list_length(xs)
+    val half = size div 2
+    
+    exception Done of 'a list
+    val xs_r = list_reverse(xs)
+    
+    fun 
+    zip( xs: 'a list, ys: 'a list, idx: int) : ('a * 'a) list =
+    if idx >= half
+    then nil
+    else case xs of
+        nil => nil
+        | x1 :: xs =>
+        (
+        case ys of
             nil => nil
-            | x1::xs =>
-                let
-                    val xs_reverse = list_reverse(xs)
-                in
-                    case xs_reverse of 
-                    nil => (last := SOME(x1); nil)
-                    | x2::xs => 
-                        let 
-                            val xs_new = list_reverse(xs)
-                        in
-                            (x1, x2)::loop(xs_new)
-                        end
-                end
-    in
-        (loop(xs), !last)
-    end
+        | y1 :: ys =>
+            (x1, y1) :: zip(xs, ys, idx+1))
+    
+    val zipped = zip(xs, xs_r, 0)
 
+in
+    if size mod 2 = 0
+    then (zipped, NONE)
+    else (zipped, SOME(list_get_at(xs,half)))
+end 
+
+
+val a0 = list_pairing([])
+val a1 = list_pairing([1])
+val a2 = list_pairing([1,2])
+val a3 = list_pairing([1,2,3])
+val a4 = list_pairing([1,2,3,4])
 
 (* use "list_pairing.sml"; *)
 (* use "midterm1-02-test.sml"; *)

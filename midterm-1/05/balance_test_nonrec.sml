@@ -107,25 +107,57 @@ andalso bintr_size(tl) = bintr_size(tr)
 *)
 (* ****** ****** *)
 
-(*
+exception NotBalanced
 val
-bintr_balanced_nonrec = fn(t0: 'a bintr) => ...
-*)
+bintr_balanced_nonrec = fn(t0: 'a bintr) => 
+let 
+  val size_check = bintr_fold(t0,
+    fn _ => 1,
+    fn(tl, tr) => 
+    if tl = tr
+    then tl + tr
+    else raise NotBalanced
+  )
+  handle NotBalanced => ~1
+
+  val height_check = bintr_fold(t0, 
+    fn _ => 1,
+    fn(tl, tr) =>
+    if tl = tr
+    then 1 + tl
+    else raise NotBalanced    
+  )
+  handle NotBalanced => ~1
+
+in
+
+  if size_check <> ~1 andalso height_check <> ~1
+  then true
+  else false
+  
+end
+
+
+
 
 (* ****** ****** *)
 
 (*
 Some testing code:
-val t0 = LEAF(0)
+*)
+(* val t0 = LEAF(0)
 val t1 = NODE(t0, t0)
 val t2 = NODE(t1, t1)
 val t3 = NODE(t2, t2)
 (* ans1 = true *)
 val ans1 = bintr_balanced_nonrec(t3)
 (* ans2 = false *)
-val ans2 = bintr_balanced_nonrec(NODE(t2, t3))
-*)
+val ans2 = bintr_balanced_nonrec(NODE(t2, t3)) *)
+
 
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm1-balance_test_nonrec.sml] *)
+
+(* use "balance_test_nonrec.sml"; *)
+(* use "midterm1-05-test.sml"; *)
