@@ -78,8 +78,7 @@ let
     val sorted = list_mergesort(xs)
     val pre = ref (hd(sorted))
     val count = ref 0
-in
-    list_foldleft(sorted, [], fn(r0, x0) =>
+    val a = list_foldleft(sorted, [], fn(r0, x0) =>
         if x0 <> !pre
         then (
             let
@@ -92,6 +91,8 @@ in
         )
         else (count := !count + 1; r0)
     )
+in
+    a@[(!count, !pre)]
 end
 
 
