@@ -141,6 +141,9 @@ def fnlist_foldright(xs, ini, fopr_func):
             (xs.cons1, fnlist_foldright(xs.cons2, ini, fopr_func))
     # end-of-(if-then-else)
 # end-of-(fnlist_foldright(xs, ini, fopr_func))
+
+
+
 ####################################################
 def fnlist_pylistize(xs):
     return foreach_to_pylistize(fnlist_foreach)(xs)
