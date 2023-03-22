@@ -59,6 +59,8 @@ def save_color_image(image, filename, mode="PNG"):
 # def grey_of_color(clr):
 #     (r0, b1, g2) = clr
 #     return round(0.299*r0+0.587*b1+0.114*g2)
+
+
 def grey_of_color(clr):
     (rr, gg, bb) = clr
     return round(0.299*rr+0.587*gg+0.114*bb)
@@ -74,8 +76,8 @@ def image_invert_color(ximg):
 #
 # towers = \
 #     load_color_image("INPUT/towers.jpg")
-# balloons = \
-#     load_color_image("INPUT/balloons.png")
+# balloons = load_color_image("INPUT/balloons.png")
+#print(balloons.pixlst)
 #
 ####################################################
 #
@@ -144,8 +146,7 @@ def image_blur_bbehav_color(image, ksize, bbehav):
         (lambda image: image_blur_bbehav_grey(image, ksize, bbehav))(image)
 
 ####################################################
-# save_color_image\
-#    (image_blur_bbehav_color(balloons, 5, 'extend'), "OUTPUT/balloons_blurred.png")
+#save_color_image(image_blur_bbehav_color(balloons, 5, 'extend'), "OUTPUT/balloons_blurred.png")
 ####################################################
 
 def image_seam_carving_color(image, ncol):
@@ -153,10 +154,44 @@ def image_seam_carving_color(image, ncol):
     Starting from the given image, use the seam carving technique to remove
     ncols (an integer) columns from the image. Returns a new image.
     """
+   
+    
     assert ncol < image.width
     energy = image_edges_color(image)
-    raise NotImplementedError
+    hh = image.height
+    ww = image.width
+    #print(energy.pixlst)
+    
+
+    def min_path(r, c, r0):
+    
+        index = ww*r+c
+        
+        min_way = energy.pixlst[index]
+        min_pos = index
+        if c > 0 and energy.pixlst[index-1] < min_way:
+            min_way = energy.pixlst[index-1]
+            min_pos = index-1
+        if c < ww-2 and energy.pixlst[index+1] < min_way:
+            min_way = energy.pixlst[index+1]
+            min_pos = index+1
+        
+        r0[c] = [r0[c][0]+min_way, r0[c][1]+[min_pos]]
+        return r0
+    
+    initial_energy = int1_foldleft(ww, [], lambda r0, x0: r0+[[energy.pixlst[x0],[x0]]])
+
+    int1_foldleft(hh -1, initial_energy, lambda r0, r:
+                   int1_foldleft(ww, r0, lambda r1, c:
+                                 min_path(r+1, c, r1)))
+    print(initial_energy)
 
 ####################################################
 # save_color_image(image_seam_carving_color(balloons, 100), "OUTPUT/balloons_seam_carving_100.png")
 ####################################################
+
+
+balloons = load_color_image("INPUT/balloons.png")
+print("height", balloons.height, "width",balloons.width)
+print(len(balloons.pixlst))
+image_seam_carving_color(balloons,0)

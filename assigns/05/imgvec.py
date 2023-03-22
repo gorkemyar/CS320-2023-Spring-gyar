@@ -43,6 +43,7 @@ def image_make_map(image, fopr_func):
     hh = image.height
     return image_make_pylist\
         (hh, ww, image_map_pylist(image, fopr_func))
+
 def image_map_pylist(image, fopr_func):
     return foreach_to_map_pylist(image_foreach)(image, fopr_func)
 
