@@ -2,8 +2,6 @@
 #!/usr/bin/env python3
 ####################################################
 import sys
-
-
 sys.path.append('./../../../05')
 sys.path.append('./../../../../mypylib')
 from mypylib_cls import *
@@ -16,8 +14,8 @@ BU CAS CS320-2023-Spring: Image Processing
 import math
 ####################################################
 import kervec
-from kervec import kernel_ifoldleft, kernel
 import imgvec
+from imgvec import image_i2filter_pylist
 ####################################################
 from PIL import Image
 ####################################################
@@ -160,77 +158,60 @@ def image_seam_carving_color(image, ncol):
    
     
     assert ncol < image.width
-    energy = image_edges_color(image)
-    hh = image.height
-    ww = image.width
-    print(hh,ww)
     
-
-    def available_neighbours(idx):
-        return int1_foldleft(3, [], \
-                        lambda r0, x0: 
-                            r0 +[x0-1] if (ww >(idx%ww + x0-1)>= 0) else r0)
-    def min_neighbour(idx, r0): 
-        #print(available_neighbours(idx))
-        max_tuple =  pylist_foldleft(
-                        available_neighbours(idx),
-                        [999999999, -1], 
-                        lambda r1, x1: 
-                            [r0[(x1 + idx) % ww][0] ,(x1+idx)% ww] if r0[(x1 + idx) % ww][0] < r1[0] else r1)
-        return max_tuple[1]
-    def update_energy(idx, r0, x0):
-        # if idx!= 0 and idx % ww == 0:
-        #     print(idx)
-        #     print(r0)
-        #     assert False
-        curr = min_neighbour(idx, r0[0])
-        #print(idx, curr)
-        r0[1][idx % ww] = [
-            r0[0][curr][0] + x0,
-            r0[0][curr][1] + [idx]
-        ]
-        if idx % ww == ww-1:
-            r0[0] = r0[1]
-        return r0
-
-    ini = int1_foldleft(ww, [], lambda r0, x0: r0+[[0,[]]])
-    energy_kernel = kernel(ww*hh, energy.pixlst)
-
-    res = kernel_ifoldleft(energy_kernel, [ini, ini], lambda r0, idx, x0: 
-                update_energy(idx, r0, x0) 
-            )
-    print(res[0][-1])
-    #print(energy.pixlst[-3:])
+    #print(energy.pixlst)
     
-
-####################################################
-# save_color_image(image_seam_carving_color(balloons, 100), "OUTPUT/balloons_seam_carving_100.png")
-####################################################
-
-"""
-154499, 154999, 155499, 155999, 156499
-def min_path(r, c, r0):
-    
-        index = ww*r+c
+    def delete_column(image):
+        print("delete_column")
+        energy = image_edges_color(image)
         
-        min_way = energy.pixlst[index]
-        min_pos = index
-        if c > 0 and energy.pixlst[index-1] < min_way:
-            min_way = energy.pixlst[index-1]
-            min_pos = index-1
-        if c < ww-2 and energy.pixlst[index+1] < min_way:
-            min_way = energy.pixlst[index+1]
-            min_pos = index+1
-        
-        r0[c] = [r0[c][0]+min_way, r0[c][1]+[min_pos]]
-        return r0
+        hh = image.height
+        ww = image.width
+        def min_path(r, c, r0):
+            value = energy.pixlst[(r+1)*ww+c]
 
-int1_foldleft(hh -1, initial_energy, lambda r0, r:
-                   int1_foldleft(ww, r0, lambda r1, c:
-                                 min_path(r+1, c, r1)))
-"""
+            index = ww*r+c      
+            min_way = energy.pixlst[index]
+            min_pos = index
+            if c > 0 and energy.pixlst[index-1] < min_way:
+                min_way = energy.pixlst[index-1]
+                min_pos = index-1
+            if c < ww-1 and energy.pixlst[index+1] < min_way:
+                min_way = energy.pixlst[index+1]
+                min_pos = index+1
+        
+            r0[c] = [r0[min_pos%ww][0]+value, r0[min_pos%ww][1]+[(r+1)*ww+c]]
+            return r0
+
+        energy_bfs = int1_foldleft(ww, [], lambda r0, x0: r0+[[energy.pixlst[x0],[x0]]])
+
+        int1_foldleft(hh -1, energy_bfs, lambda r0, r:
+                int1_foldleft(ww, r0[:], lambda r1, c:
+                        min_path(r, c, r0[:])))
+        
+        print(energy_bfs[-1])
+        # for i in energy_bfs:
+        #     if len(i[1]) != hh:
+        #         assert False
+
+        min_energy = pylist_foldleft(energy_bfs, [99999999999999, []], 
+                lambda r0, x0:
+                        x0 if x0[0] < r0[0] else r0)
+    
+        print("min",min_energy[1], len(min_energy[1]))
+        image.pixlst = image_i2filter_pylist(image, lambda r, c, pix:
+                                         r*ww+c not in min_energy[1])
+                                         
+        image.width = ww - 1
+
+        return image
+
+    return int1_foldleft(ncol, image, lambda r0, x0: delete_column(r0))
 
 balloons = load_color_image("INPUT/balloons.png")
-print("height", balloons.height, "width",balloons.width)
-print(len(balloons.pixlst))
-image_seam_carving_color(balloons,0)
+####################################################
+save_color_image(image_seam_carving_color(balloons, 1), "OUTPUT/balloons_seam_carving_100.png")
+####################################################
+
+
+
