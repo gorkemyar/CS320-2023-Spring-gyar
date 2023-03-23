@@ -163,7 +163,7 @@ def func_image_pixel_wrap(image, x, y):
     def func(i, j):
         xi = (x+i) % hh
         yi = (y+j) % ww
-        return image_get_pixel(image, xi, yj)
+        return image_get_pixel(image, xi, yi)
 
     return lambda i, j: func(i, j)
 

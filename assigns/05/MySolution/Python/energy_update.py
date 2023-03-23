@@ -15,7 +15,6 @@ import math
 ####################################################
 import kervec
 import imgvec
-from imgvec import image_i2filter_pylist
 ####################################################
 from PIL import Image
 ####################################################
@@ -168,12 +167,13 @@ def image_seam_carving_color(image, ncol):
         
         hh = image.height
         ww = image.width
+        print("ww is",ww)
         def min_path(row, col, data, r1):
             value = energy.pixlst[(row+1)*ww+col]
                 
             min_way = data[col][0]
             min_pos = col
-            if col > 0 and data[col-1][0] < min_way:
+            if col > 0 and data[col-1][0] <= min_way:
                 min_way = data[col-1][0]
                 min_pos = col-1
 
@@ -200,14 +200,17 @@ def image_seam_carving_color(image, ncol):
         min_energy = pylist_foldleft(energy_bfs, [99999999999999, []], 
                 lambda r0, x0:
                         x0 if x0[0] < r0[0] else r0)
-        #print(energy_bfs[9])
-        #print(min_energy[1])
-        #print("min",min_energy[0], len(min_energy[1]))
-        image.pixlst = image_i2filter_pylist(image, lambda r, c, pix:
+        
+        print(min_energy[1])
+        print("min",min_energy[0], len(min_energy[1]))
+        image.pixlst = imgvec.image_i2filter_pylist(image, lambda r, c, pix:
                                         min_energy[1][r] != c)
         image.width = ww - 1
         
+        print("ww is",ww)
         energy.pixlst = pylist_make_ifilter(energy.pixlst, lambda i0, x0: min_energy[1][i0//ww] != i0%ww)
+        
+        print(len(energy.pixlst), hh*(ww-1))
         energy.width = ww - 1
         
 
@@ -217,7 +220,7 @@ def image_seam_carving_color(image, ncol):
 
 balloons = load_color_image("INPUT/balloons.png")
 ####################################################
-save_color_image(image_seam_carving_color(balloons, 100), "OUTPUT/balloons_seam_carving_energy_100.png")
+save_color_image(image_seam_carving_color(balloons, 3), "OUTPUT/balloons_seam_carving_energy_100.png")
 ####################################################
 
 
