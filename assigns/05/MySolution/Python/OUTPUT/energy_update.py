@@ -160,11 +160,11 @@ def image_seam_carving_color(image, ncol):
     assert ncol < image.width
     
     #print(energy.pixlst)
-    
-    def delete_column(image):
+    energy = image_edges_color(image)
+    def delete_column(image, energy):
         print("delete_column")
-        energy = image_edges_color(image)
         
+        #print(energy.pixlst[-1000:])
         
         hh = image.height
         ww = image.width
@@ -201,20 +201,23 @@ def image_seam_carving_color(image, ncol):
                 lambda r0, x0:
                         x0 if x0[0] < r0[0] else r0)
         #print(energy_bfs[9])
-        print(min_energy[1])
-        print("min",min_energy[0], len(min_energy[1]))
+        #print(min_energy[1])
+        #print("min",min_energy[0], len(min_energy[1]))
         image.pixlst = image_i2filter_pylist(image, lambda r, c, pix:
                                         min_energy[1][r] != c)
-                                         
         image.width = ww - 1
+        
+        energy.pixlst = pylist_make_ifilter(energy.pixlst, lambda i0, x0: min_energy[1][i0//ww] != i0%ww)
+        energy.width = ww - 1
+        
 
         return image
 
-    return int1_foldleft(ncol, image, lambda r0, x0: delete_column(r0))
+    return int1_foldleft(ncol, image, lambda r0, x0: delete_column(r0, energy))
 
 balloons = load_color_image("INPUT/balloons.png")
 ####################################################
-save_color_image(image_seam_carving_color(balloons, 10), "OUTPUT/balloons_seam_carving_10.png")
+save_color_image(image_seam_carving_color(balloons, 100), "OUTPUT/balloons_seam_carving_energy_100.png")
 ####################################################
 
 

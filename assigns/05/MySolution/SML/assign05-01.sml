@@ -31,7 +31,9 @@ library for this class.
 fun
 ref_get_at
 (r0: 'a ref, i: int): 'a =
-    !r0
+    if i > 0 
+    then raise Subscript
+    else !r0
 
 fun
 ref_forall

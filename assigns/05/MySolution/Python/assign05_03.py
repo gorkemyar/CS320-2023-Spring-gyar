@@ -2,8 +2,6 @@
 #!/usr/bin/env python3
 ####################################################
 import sys
-
-
 sys.path.append('./../../../05')
 sys.path.append('./../../../../mypylib')
 from mypylib_cls import *
@@ -16,8 +14,10 @@ BU CAS CS320-2023-Spring: Image Processing
 import math
 ####################################################
 import kervec
-from kervec import kernel_ifoldleft, kernel
+from kervec import *
 import imgvec
+from imgvec import *
+
 ####################################################
 from PIL import Image
 ####################################################
@@ -152,6 +152,7 @@ def image_blur_bbehav_color(image, ksize, bbehav):
 #save_color_image(image_blur_bbehav_color(balloons, 5, 'extend'), "OUTPUT/balloons_blurred.png")
 ####################################################
 
+
 def image_seam_carving_color(image, ncol):
     """
     Starting from the given image, use the seam carving technique to remove
@@ -160,77 +161,69 @@ def image_seam_carving_color(image, ncol):
    
     
     assert ncol < image.width
-    energy = image_edges_color(image)
-    hh = image.height
-    ww = image.width
-    print(hh,ww)
     
-
-    def available_neighbours(idx):
-        return int1_foldleft(3, [], \
-                        lambda r0, x0: 
-                            r0 +[x0-1] if (ww >(idx%ww + x0-1)>= 0) else r0)
-    def min_neighbour(idx, r0): 
-        #print(available_neighbours(idx))
-        max_tuple =  pylist_foldleft(
-                        available_neighbours(idx),
-                        [999999999, -1], 
-                        lambda r1, x1: 
-                            [r0[(x1 + idx) % ww][0] ,(x1+idx)% ww] if r0[(x1 + idx) % ww][0] < r1[0] else r1)
-        return max_tuple[1]
-    def update_energy(idx, r0, x0):
-        # if idx!= 0 and idx % ww == 0:
-        #     print(idx)
-        #     print(r0)
-        #     assert False
-        curr = min_neighbour(idx, r0[0])
-        #print(idx, curr)
-        r0[1][idx % ww] = [
-            r0[0][curr][0] + x0,
-            r0[0][curr][1] + [idx]
-        ]
-        if idx % ww == ww-1:
-            r0[0] = r0[1]
-        return r0
-
-    ini = int1_foldleft(ww, [], lambda r0, x0: r0+[[0,[]]])
-    energy_kernel = kernel(ww*hh, energy.pixlst)
-
-    res = kernel_ifoldleft(energy_kernel, [ini, ini], lambda r0, idx, x0: 
-                update_energy(idx, r0, x0) 
-            )
-    print(res[0][-1])
-    #print(energy.pixlst[-3:])
+    #print(energy.pixlst)
     
-
-####################################################
-# save_color_image(image_seam_carving_color(balloons, 100), "OUTPUT/balloons_seam_carving_100.png")
-####################################################
-
-"""
-154499, 154999, 155499, 155999, 156499
-def min_path(r, c, r0):
-    
-        index = ww*r+c
+    def delete_column(image):
+        print("delete_column")
+        energy = image_edges_color(image)
+        print(energy.pixlst[-500:])
         
-        min_way = energy.pixlst[index]
-        min_pos = index
-        if c > 0 and energy.pixlst[index-1] < min_way:
-            min_way = energy.pixlst[index-1]
-            min_pos = index-1
-        if c < ww-2 and energy.pixlst[index+1] < min_way:
-            min_way = energy.pixlst[index+1]
-            min_pos = index+1
-        
-        r0[c] = [r0[c][0]+min_way, r0[c][1]+[min_pos]]
-        return r0
+        hh = image.height
+        ww = image.width
+        def min_path(row, col, data, r1):
+            value = energy.pixlst[(row+1)*ww+col]
+                
+            min_way = data[col][0]
+            min_pos = col
+            if col > 0 and data[col-1][0] < min_way:
+                min_way = data[col-1][0]
+                min_pos = col-1
 
-int1_foldleft(hh -1, initial_energy, lambda r0, r:
-                   int1_foldleft(ww, r0, lambda r1, c:
-                                 min_path(r+1, c, r1)))
-"""
+            if col < ww-1 and data[col+1][0] < min_way:
+                min_way = data[col+1][0]
+                min_pos = col+1
+        
+            r1 = r1 + [[min_way+value, data[min_pos][1]+[col]]]
+            #print(r1)
+
+            return r1
+
+        energy_bfs = int1_foldleft(ww, [], lambda r0, x0: r0+[[energy.pixlst[x0],[x0]]])
+
+        energy_bfs = int1_foldleft(hh -1, energy_bfs, lambda current_data, row:
+                int1_foldleft(ww, [], lambda r1, col:
+                        min_path(row, col, current_data, r1)))
+        
+        
+        for i in energy_bfs:
+            if len(i[1]) != hh:
+                assert False
+
+        min_energy = pylist_foldleft(energy_bfs, [99999999999999, []], 
+                lambda r0, x0:
+                        x0 if x0[0] < r0[0] else r0)
+        #print(energy_bfs[9])
+        #print(min_energy[1])
+        #print("min",min_energy[0], len(min_energy[1]))
+        image.pixlst = image_i2filter_pylist(image, lambda r, c, pix:
+                                        min_energy[1][r] != c)
+                                         
+        image.width = ww - 1
+
+        return image
+
+    return int1_foldleft(ncol, image, lambda r0, x0: delete_column(r0))
 
 balloons = load_color_image("INPUT/balloons.png")
-print("height", balloons.height, "width",balloons.width)
-print(len(balloons.pixlst))
-image_seam_carving_color(balloons,0)
+####################################################
+#save_color_image(image_seam_carving_color(balloons, 1), "OUTPUT/balloons_seam_carving_1.png")
+####################################################
+
+a = [20, 21, 20, 21, 20, 19, 18, 17, 16, 15, 14, 15, 15, 14, 15, 16, 17, 18, 19, 18, 19, 20, 19, 20, 21, 22, 22, 22, 21, 20, 20, 21, 20, 19, 18, 19, 20, 21, 20, 20, 21, 22, 21, 20, 19, 18, 17, 16, 15, 15, 16, 17, 17, 17, 16, 15, 16, 15, 14, 15, 16, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 6, 5, 4, 5, 5, 5, 6, 7, 8, 7, 8, 7, 6, 6, 5, 4, 3, 2, 3, 4, 5, 4, 3, 3, 2, 2, 2, 3, 3, 2, 1, 1, 1, 1, 2, 3, 2, 1, 1, 2, 1, 1, 1, 2, 3, 2, 3, 4, 5, 6, 7, 8, 9, 9, 8, 9, 9, 9, 10, 11, 12, 13, 13, 13, 14, 15, 15, 16, 17, 17, 17, 16, 15, 15, 15, 14, 13, 12, 11, 12, 11, 11, 10, 9, 9, 8, 7, 6, 5, 4, 3, 3, 2, 2, 2, 2, 3, 2, 1, 2, 3, 4, 4, 3, 4, 3, 4, 4, 3, 3, 2, 2, 1, 0, 1, 2, 3, 4, 5, 4, 4, 5, 6, 6, 7, 6, 5, 5, 4, 3, 2, 1, 1, 2, 2, 3, 4, 5, 4, 3, 3, 2, 1, 1, 2, 3, 2, 3, 2, 1, 1, 1, 2, 3, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2, 2, 2, 3, 4, 5, 6, 7, 7, 7, 8, 8, 9, 9, 8, 9, 10, 11, 10, 9, 8, 7, 6, 7, 6, 5, 4, 3, 2, 3, 4, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 10, 9, 8, 7, 6, 6, 6, 7, 6, 5, 6, 7, 7, 8, 9, 8, 8, 9, 8, 7, 6, 7, 7, 6, 5, 6, 5, 4, 3, 3, 4, 5, 6, 7, 8, 8]
+
+energy = image_edges_color(balloons)
+r = foreach_to_ifoldleft(pylist_foreach)(a, [], lambda r0, i0, x0: r0+ [energy.pixlst[i0*energy.width+x0]] )
+print(r)    
+
+print(len([28, 28, 0, 4, 3, 0, 1, 4, 0, 0, 4, 0, 1, 0, 3, 4, 0, 0, 4, 1, 1, 4, 0, 1, 4, 0, 0, 0, 1, 4, 1, 3, 3, 0, 0, 0, 1, 4, 1, 4, 1, 4, 1, 0, 0, 4, 4, 4, 4,1, 0, 5, 1, 4, 4, 1, 2, 4, 0, 1, 0, 4, 2, 1, 0, 3, 3, 0, 1, 0, 3, 2, 5, 3, 2, 3, 6, 4, 4, 8, 6, 0, 3, 3, 2, 2, 1, 1, 3, 2, 3, 1, 4, 4, 2, 1, 4, 1, 1, 1, 3, 3, 0, 3, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 6, 4, 3, 2, 3, 4, 12, 5, 2, 10, 8, 4, 11, 21, 22, 14, 4, 15, 13, 2, 0, 7, 7, 14, 19, 37, 6, 7, 36, 53, 131, 64, 47, 51, 21, 44, 105, 124, 113, 27, 71, 10, 98, 147, 56, 42, 72, 148, 177, 85, 88, 51, 20, 23, 18, 13, 20, 43, 10, 21, 56, 24, 13, 10, 40, 21, 19, 23, 25, 30, 13, 13, 49, 16, 23, 9, 16, 113, 106, 86, 72, 255, 55, 58, 51, 31, 19, 9, 17, 6, 8, 24, 18, 17, 16, 24, 14, 3, 13, 3, 6, 7, 4, 16, 6, 2, 2, 4, 13, 10, 3, 4, 6, 2, 6, 12, 5, 4, 1, 6, 3, 4, 3, 3, 6, 2, 1, 8, 10, 3, 1, 8, 6, 4, 3, 6, 5, 1, 0, 7, 3, 4, 6, 8, 4, 0, 4, 8, 4, 5, 11, 2, 4, 4, 8, 4, 1, 8, 4, 2, 4, 2, 4, 4, 6, 4, 0, 6, 6, 2, 4, 2, 7, 6, 2, 0, 2, 4, 4, 4, 4, 9, 8, 0, 1, 5, 4, 2, 0, 3, 8, 1, 1, 8, 6, 3, 2, 27, 34]))
