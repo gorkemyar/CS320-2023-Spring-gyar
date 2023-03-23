@@ -60,7 +60,7 @@ def image_rotate_090r(image):
     hh = image.height
     return \
         imgvec.image_make_pylist\
-        (ww, hh, int1_map_pylist(hh*ww, lambda ij: imgvec.image_get_pixel(image, (hh-1-(ij%ww)), ij//hh)))
+        (ww, hh, int1_map_pylist(hh*ww, lambda ij: imgvec.image_get_pixel(image, (hh-1-(ij%hh)), ij//hh)))
 ####################################################
 balloons = \
     load_color_image\
@@ -73,7 +73,8 @@ save_color_image(image_rotate_090r(balloons), "balloons_090r.png")
 # 5 6 7 8 9
 # 10 11 12 13 14
 
-# 10 5 0  11 6 1
+# 10 5 0  
+# 11 6 1
 # 12 7 2
 # 13 8 3
 # 14 9 4
