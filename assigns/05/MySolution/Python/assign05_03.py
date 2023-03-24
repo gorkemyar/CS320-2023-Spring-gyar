@@ -158,7 +158,14 @@ def image_seam_carving_color(image, ncol):
     ncols (an integer) columns from the image. Returns a new image.
     """
     assert ncol < image.width
-    
+    def image_copy(image):
+        ww = image.width
+        hh = image.height
+        return \
+            imgvec.image_make_pylist\
+            (hh, ww, int1_map_pylist(hh*ww, lambda ij: imgvec.image_get_pixel(image, ij//ww, ij%ww)))
+    copy_image = image_copy(image)
+
     def delete_column(image):
         #print("delete_column")
         energy = image_edges_color(image)
@@ -190,7 +197,7 @@ def image_seam_carving_color(image, ncol):
                         min_path(row, col, current_data, r1)))
         
 
-        assert pylist_foldleft(energy_bfs, True,lambda r0, x0: r0 and len(x0[1]) == hh )
+        #assert pylist_foldleft(energy_bfs, True,lambda r0, x0: r0 and len(x0[1]) == hh )
         
         min_energy = pylist_foldleft(energy_bfs, [99999999999999999, []], 
                 lambda r0, x0: x0 if x0[0] < r0[0] else r0)
@@ -204,10 +211,10 @@ def image_seam_carving_color(image, ncol):
         image.width = ww - 1
         return image
 
-    return int1_foldleft(ncol, image, lambda r0, x0: delete_column(r0))
+    return int1_foldleft(ncol, copy_image, lambda r0, x0: delete_column(r0))
 
-balloons = load_color_image("INPUT/balloons.png")
+#balloons = load_color_image("INPUT/balloons.png")
 ####################################################
-save_color_image(image_seam_carving_color(balloons, 200), "OUTPUT/balloons_seam_carving_200.png")
+#save_color_image(image_seam_carving_color(balloons, 200), "OUTPUT/balloons_seam_carving_200.png")
 ####################################################
 
