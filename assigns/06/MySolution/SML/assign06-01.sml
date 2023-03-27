@@ -19,10 +19,23 @@ And so on, and so forth
 
 (* ****** ****** *)
 
-(*
-val the_ln2_stream: real stream = fn() => ...
-*)
 
+val the_ln2_stream: real stream = fn() =>
+    let
+        fun sum_series(last, i0, sign): real stream = fn() =>
+        let 
+            val cur = last + sign / i0
+        in
+            strcon_cons(cur, sum_series(cur, i0+1.0, sign * ~1.0 ))
+        end
+    in
+        sum_series(0.0, 1.0, 1.0)()
+    end
+
+
+
+(* use "assign06-01.sml"; *)
+(* use "assign06-01-test.sml"; *)
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-assign06-01.sml] *)
