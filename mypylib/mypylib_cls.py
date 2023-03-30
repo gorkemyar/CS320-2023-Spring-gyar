@@ -655,3 +655,16 @@ def stream_make_filter(fxs, test):
 ###########################################################################
 
 ######################### end of [mypylib-cls.py] #########################
+
+def gtree_bfs(nxs, fchildren):
+    def helper(nxs):
+        if nxs.empty():
+            return strcon_nil()
+        else:
+            nx1 = nxs.get()
+            # print("gtree_bfs: helper: nx1 = ", nx1)
+            for nx2 in fchildren(nx1):
+                nxs.put(nx2)
+            return strcon_cons(nx1, lambda: helper(nxs))
+    # end-of-(if(not nxs)-then-else)
+    return lambda: helper(nxs)
