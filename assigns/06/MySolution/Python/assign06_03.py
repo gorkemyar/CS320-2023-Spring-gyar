@@ -42,13 +42,14 @@ def solve_N_queen_puzzle(N):
     def find_children(parent):
         res = []
         position = -1
+
         for i in range(len(parent)):
             if parent[i] == 0:
                 position = i
                 break
         if position == -1:
             return res
-        
+
         for x in range(1,len(parent)+1):
             flag = True
             for i in range(position):
@@ -74,36 +75,36 @@ def solve_N_queen_puzzle(N):
         # end-of-(if(not nxs)-then-else)
         return lambda: helper(nxs)
 
-    def check_valid_board(board):
-        #print(board)
-        for i in range(len(board)):
-            for j in range(0, i):
-                if abs(i - j) == abs(board[i] - board[j]) or board[i] == board[j] or board[i] == 0:
-                    return False  
+    def check_valid_board(board, N):
+        return int1_forall(N, lambda i: 
+                    int1_forall(i, lambda j:
+                                abs(board[i] - board[j]) != abs(i-j) \
+                                and board[i] != board[j] \
+                                and board[i] != 0))
 
-        #print("True")    
-        return True
+        
 
-    def find_first(snxs):
+    def find_first(snxs, N):
         stream_board = gtree_dfs(snxs, find_children)
         call_board = stream_board()
-        check_valid = check_valid_board(call_board.cons1)
+        check_valid = check_valid_board(call_board.cons1, N)
         while check_valid == False:
             stream_board = call_board.cons2
-            
             call_board = stream_board()
-            check_valid = check_valid_board(call_board.cons1)
-        return strcon_cons(call_board.cons1, lambda: find_first(snxs))
+            if type(call_board).__name__ == "strcon_nil":
+                return strcon_nil()
+            check_valid = check_valid_board(call_board.cons1, N)
+        return strcon_cons(tuple(call_board.cons1), lambda: find_first(snxs, N))
 
 
     snxs = queue.LifoQueue()
     snxs.put([0]*N)
     
-    return lambda: find_first(snxs)
+    return lambda: find_first(snxs, N)
     
 
     
-# fxs = solve_N_queen_puzzle(5)
+# fxs = solve_N_queen_puzzle(3)
 # print(fxs)
 
 # cxs = fxs()
