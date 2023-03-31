@@ -1,0 +1,12 @@
+(1, 3, 5, 2, 13, 9, 14, 12, 15, 6, 16, 7, 4, 11, 8, 10)
+(1, 3, 5, 2, 13, 10, 12, 15, 6, 16, 14, 8, 4, 7, 9, 11)
+(1, 3, 5, 2, 4, 13, 15, 12, 18, 20, 17, 9, 16, 19, 8, 10, 7, 14, 6, 11)
+(1, 3, 5, 2, 4, 13, 15, 12, 18, 20, 17, 9, 16, 19, 10, 8, 6, 14, 7, 11)
+Assign06-03-test passed!
+
+[nltk_data] Downloading package words to /Users/gorkemyar/nltk_data...
+[nltk_data]   Package words is already up-to-date!
+potato:  True
+tomato:  True
+zucchini:  True
+Assign06-04-test passed!

@@ -2,7 +2,9 @@
 #!/usr/bin/env python3
 ####################################################
 import sys
+sys.path.append('../../../06')
 sys.path.append('./../../../../mypylib')
+from dictwords import *
 from mypylib_cls import *
 import queue
 ####################################################
@@ -11,15 +13,6 @@ HX-2023-03-24: 30 points
 Solving the doublet puzzle
 """
 ####################################################
-
-import nltk
-nltk.download('words')
-from nltk.corpus import words
-################################################
-setofwords = set(words.words())
-################################################
-def word_is_legal(word):
-    return word in setofwords
 
 def doublet_stream_from(word):
     """
@@ -88,10 +81,3 @@ def doublet_stream_from(word):
     return gtree_bfs(qnxs, word_neighbors)
 ####################################################
 
-
-# fxs = doublet_stream_from("water")
-
-# for i in range(100):
-#     cxs = fxs()
-#     fxs = cxs.cons2
-#     print(cxs.cons1)
