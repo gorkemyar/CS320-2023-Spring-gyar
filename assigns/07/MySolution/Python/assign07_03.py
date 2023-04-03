@@ -38,5 +38,37 @@ def doublet_bfs_test(w1, w2):
     it returns a path connecting w1 and w2 that attests to the
     two words forming a doublet.
     """
-    raise NotImplementedError
+    
+    def word_neighbors_pylistize(word):
+        AB = "abcdefghijklmnopqrstuvwxyz"
+
+        def string_ifoldleft(xs, r0, ifopr_func):
+            return foreach_to_ifoldleft(string_foreach)(xs, r0, ifopr_func)
+        def pylist_filter(xs, test_func):
+            return foreach_to_filter_pylist(pylist_foreach)(xs, test_func)
+
+        neighbours=  pylist_filter(
+                    pylist_concat(string_imap_pylist(word, 
+                                lambda i, c1: \
+                                        string_imap_fnlist(AB, lambda _, c2: \
+                                            string_ifoldleft(word, "", lambda r0, j, c3: \
+                                                r0 + c3 if i != j else r0 + c2 )  \
+                                    if c1 != c2 \
+                                    else None)
+                                )
+                            ),
+                    lambda x0: x0 != None and word_is_legal(x0)
+                    )
+        
+        return pylist_foldleft(neighbours, [], lambda r0, x0: r0 + [x0])
+
+    def stream_foldleft(fxs, r0, fopr_func):
+        return foreach_to_foldleft(stream_foreach)(fxs, r0, fopr_func)
+    
+    fxs = gpath_bfs((w1,), word_neighbors_pylistize)
+    return stream_foldleft(fxs, None, lambda r0, path: path if path[-1] == w2 else r0)
+    
+
+res = doublet_bfs_test("cat", "bat")
+print(res)
 ####################################################
