@@ -8,6 +8,7 @@ sys.path.append('./../../../../mypylib')
 ####################################################
 from dictwords import *
 from mypylib_cls import *
+from mypylib_ind import *
 from assign05_02 import *
 ####################################################
 """
@@ -47,10 +48,10 @@ def doublet_bfs_test(w1, w2):
         def pylist_filter(xs, test_func):
             return foreach_to_filter_pylist(pylist_foreach)(xs, test_func)
 
-        neighbours=  pylist_filter(
+        return pylist_filter(
                     pylist_concat(string_imap_pylist(word, 
                                 lambda i, c1: \
-                                        string_imap_fnlist(AB, lambda _, c2: \
+                                        string_imap_pylist(AB, lambda _, c2: \
                                             string_ifoldleft(word, "", lambda r0, j, c3: \
                                                 r0 + c3 if i != j else r0 + c2 )  \
                                     if c1 != c2 \
@@ -59,16 +60,15 @@ def doublet_bfs_test(w1, w2):
                             ),
                     lambda x0: x0 != None and word_is_legal(x0)
                     )
-        
-        return pylist_foldleft(neighbours, [], lambda r0, x0: r0 + [x0])
-
-    def stream_foldleft(fxs, r0, fopr_func):
-        return foreach_to_foldleft(stream_foreach)(fxs, r0, fopr_func)
+    def stream_find(fxs, fopr_func):
+        return foreach_to_find(stream_foreach)(fxs, fopr_func)
     
     fxs = gpath_bfs((w1,), word_neighbors_pylistize)
-    return stream_foldleft(fxs, None, lambda r0, path: path if path[-1] == w2 else r0)
+    return stream_find(fxs, lambda path: path[-1] == w2)
     
 
-res = doublet_bfs_test("cat", "bat")
-print(res)
+# r1 = foreach_to_find(pylist_foreach)([1,2,3,4,5,6], lambda x0: x0 > 2.5)
+# print(r1)
+# res = doublet_bfs_test("cat", "bat")
+# print(res)
 ####################################################
