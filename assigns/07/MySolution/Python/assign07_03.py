@@ -67,6 +67,7 @@ def doublet_bfs_test(w1, w2):
     return stream_find(fxs, lambda path: path[-1] == w2)
     
 
+
 # r1 = foreach_to_find(pylist_foreach)([1,2,3,4,5,6], lambda x0: x0 > 2.5)
 # print(r1)
 # res = doublet_bfs_test("cat", "bat")

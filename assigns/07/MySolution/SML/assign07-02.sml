@@ -18,24 +18,7 @@ theNatPairs_cubesum: (int * int) stream = fn () =>
 //
 *)
 
-fun 
-find_nextpair(y1: int, y2: int): (int * int) stream = fn() =>
-let
-  val z1 = ref (y1 + 2)
-  val z2 = ref (y2 + 2)
-  val a = 
-  int1_foldleft(y2 + 2, 0, 
-    fn(r2, x2) =>
-    int1_foldleft(x2 + 1, 0, 
-      fn(r1, x1) =>
-      if (x2*x2*x2 + x1*x1*x1) > (y1*y1*y1 + y2*y2*y2) andalso (x2*x2*x2 + x1*x1*x1) < (!z1 * !z1 * !z1 + !z2 * !z2 * !z2)
-      then (z2 := x2; z1 := x1; r1)
-      else r1
-    )
-  )
-in
-  strcon_cons((!z1,!z2), find_nextpair(!z1, !z2))
-end
+
 
 
 val
