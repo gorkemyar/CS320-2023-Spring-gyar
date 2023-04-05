@@ -54,6 +54,9 @@ val () =
 assert320(mycheck1(theNatPairs_cubesum, 0, 0))
 
 (* ****** ****** *)
+val () = print
+("Assign07-02-test: the ordering test done!\n" )
+(* ****** ****** *)
 
 val () =
 assert320
@@ -63,8 +66,9 @@ val () = print_int(0)
 val () =
 assert320
 (stream_get_at(theNatPairs_cubesum, 9999) = (84,140))
+
 (* ****** ****** *)
-val () = print( "Assign07-02-test passed!\n" )
+val () = print( "Assign07-02-test: All passed! Congrats!\n" )
 (* ****** ****** *)
 
 end (* end-of-local *)
