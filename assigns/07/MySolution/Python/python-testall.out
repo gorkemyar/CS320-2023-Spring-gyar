@@ -1,0 +1,4 @@
+test1 =  ('never', 'sever', 'seven', 'semen', 'hemen', 'hemin', 'humin', 'cumin', 'curin', 'aurin', 'agrin', 'again')
+test2 =  ('flour', 'floor', 'flood', 'blood', 'brood', 'broad', 'bread')
+test3 =  ('hello', 'hollo', 'holly', 'molly', 'mouly', 'mould', 'would', 'world')
+Assign07-03-test passed!

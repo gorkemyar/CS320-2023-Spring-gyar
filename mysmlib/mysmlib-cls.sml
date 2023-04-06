@@ -1051,12 +1051,3 @@ else strcon_cons
 
 (* end of [BUCASCS320-2023-Spring-mysmlib-cls.sml] *)
 
-fun stream_merge(fxs1: 'a stream, fxs2: 'a stream, lte3:'a * 'a -> bool): 'a stream = fn() =>
-case fxs1() of 
-strcon_nil => fxs2()
-| strcon_cons(x1, fxs1) => 
-case fxs2() of
-strcon_nil => strcon_cons(x1, fxs1)
-| strcon_cons(x2, fxs2) => if lte3(x1, x2)
-                           then strcon_cons(x1, stream_merge(fxs1, stream_cons(x2, fxs2), lte3))
-                           else strcon_cons(x2, stream_merge(stream_cons(x1, fxs1), fxs2, lte3))

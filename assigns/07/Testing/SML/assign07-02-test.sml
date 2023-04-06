@@ -62,7 +62,6 @@ val () =
 assert320
 (stream_get_at(theNatPairs_cubesum, 999) = (30,42))
 
-val () = print_int(0)
 val () =
 assert320
 (stream_get_at(theNatPairs_cubesum, 9999) = (84,140))
