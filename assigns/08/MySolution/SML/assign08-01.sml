@@ -16,22 +16,7 @@ stream_permute_list(xs: 'a list): 'a list stream = ...
 //
 *)
 
-(* fun permute(xs: 'a list): 'a list list =
-let
-  val pre = ref []
-  val later = ref xs
-  val last = ref nil
-in
-  list_foldleft(xs, [], fn(r0, x0) =>
-  let
-    val (h::t) = !later
-  in
-    (later := t; pre := !pre@(!last); last := [x0]; r0@[x0::(!pre)@(!later)])
-  end
-)
-end *)
-
-fun permute2(xs: 'a list): 'a list list = 
+fun permute(xs: 'a list): 'a list list = 
 let
     fun helper(xs: 'a list, pre: 'a list, res: 'a list list): 'a list list =
     case xs of
@@ -44,13 +29,13 @@ end
 fun position_permute(xs: 'a list, pos: int): 'a list list = 
 let
     val rmn = ref []
-    val first = foreach_to_ifoldleft(list_foreach)(xs, [], 
+    val first = list_reverse(foreach_to_ifoldleft(list_foreach)(xs, [], 
         fn(r0, idx, x0) =>
         if idx < pos
-        then r0@[x0]
-        else (rmn := !rmn@[x0]; r0)
-    )
-    val perm = permute2(!rmn)
+        then x0::r0
+        else (rmn := x0::(!rmn); r0)
+    ))
+    val perm = permute(list_reverse(!rmn))
 in
     list_foldleft(perm, [], fn(r0, x0) => r0@[first@x0])
 end
@@ -65,27 +50,26 @@ let
     strcon_nil => strcon_nil
     | strcon_cons(x0, fxs) =>
     if pos < size-1
-    then 
-        let
-            val lists = position_permute(x0, pos)
-        in
-            list_foldleft(lists, fxs, fn(r0, x1) => helper(stream_cons(x1, r0), pos+1))()
-        end
+    then list_foldleft(
+            position_permute(x0, pos), 
+            fxs, 
+            fn(r0, x1) => 
+                helper(stream_cons(x1, r0), pos+1)
+        )()
     else strcon_cons(x0, fxs)
 in
     helper(stream_cons(xs, stream_nil()), 0)
-end
-    
+end    
 
 (* val () = print_int(stream_length
 (stream_permute_list[1,2,3,4,5,6])) *)
-val fxs = stream_permute_list([1,2,3,4])
+(* val fxs = stream_permute_list([1,2,3,4]) *)
 
 (* val a = position_permute([1,2,3,4], 3) *)
 
-val strcon_cons(a1, fxs) = fxs()
+(* val strcon_cons(a1, fxs) = fxs()
 val strcon_cons(a2, fxs) = fxs()
-(* val strcon_cons(a3, fxs) = fxs()
+val strcon_cons(a3, fxs) = fxs()
 val strcon_cons(a4, fxs) = fxs()
 val strcon_cons(a5, fxs) = fxs() 
 val strcon_cons(a6, fxs) = fxs()
@@ -110,7 +94,6 @@ val strcon_cons(a24, fxs) = fxs()  *)
 
 (* use "assign08-01.sml";  *)
 (* use "assign08-01-test.sml";  *)
-
 
 (* ****** ****** *)
 

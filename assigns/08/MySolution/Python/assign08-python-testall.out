@@ -1,0 +1,18 @@
+crc-dot1x-nat-10-239-90-25:Python gorkemyar$ python assign08_02_test.py 
+Assign08-02-test passed!
+crc-dot1x-nat-10-239-90-25:Python gorkemyar$ python assign08_02_test2.py 
+Assign08-02-test2 passed!
+crc-dot1x-nat-10-239-90-25:Python gorkemyar$ python assign08_03_test.py 
+[nltk_data] Error loading words: <urlopen error [SSL:
+[nltk_data]     CERTIFICATE_VERIFY_FAILED] certificate verify failed:
+[nltk_data]     unable to get local issuer certificate (_ssl.c:992)>
+potato:  True
+tomato:  True
+zucchini:  True
+doublet_bfs_test('never', 'never') =  True
+doublet_bfs_test('never', 'again') =  True
+doublet_bfs_test('flour', 'bread') =  True
+doublet_bfs_test('hello', 'world') =  True
+doublet_bfs_test('hello', 'xerox') =  False
+doublet_bfs_test('xerox', 'hello') =  False
+Assign08-03-test passed!
