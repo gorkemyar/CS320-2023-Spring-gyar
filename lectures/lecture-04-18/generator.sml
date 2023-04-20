@@ -30,10 +30,23 @@ end
 
 fun
 generator_yield
-(cres, ret0, cret): unit =
+(cval, ret0, cret): 'a =
 callcc
 (fn cc =>
- (cret := cc; throw (!ret0) cres))
+ (cret := cc; throw (!ret0) cval))
+
+(* ****** ****** *)
+
+fun
+generator_yield_from
+(gen1, ret0, cret): 'a =
+let
+val
+cval = generator_next(gen1)
+in(*in-of-let*)
+generator_yield(cval, ret0, cret);
+generator_yield_from(gen1, ret0, cret)
+end
 
 (* ****** ****** *)
 
@@ -49,12 +62,12 @@ let
   val ret0 = ref(Unsafe.cast(NONE))
   val cret = ref(Unsafe.cast(NONE))
 in
-  callcc
-  (fn cc0 =>
-   (callcc(fn cc1 =>
-    (cret := cc1; throw cc0 ())); gfun(ret0, cret); ()));
-  (ret0, cret)
-end
+callcc
+(fn cc0 =>
+ (callcc(fn cc1 =>
+  (cret := cc1; throw cc0 ())); gfun(ret0, cret); ()));
+(ret0, cret)
+end (* end-of-let: [generator_make_fun] *)
 
 (* ****** ****** *)
 
@@ -91,7 +104,8 @@ let
   val x1 =
   generator_next(gxs)
   val () =
-  if test(x1) then generator_yield(x1, ret0, cret) else ()
+  if test(x1)
+  then generator_yield(x1, ret0, cret) else ()
 in
   genfun( ret0, cret )
 end
@@ -120,7 +134,7 @@ generator_make_fun
 fn
 (ret0, cret) =>
 my_int_from2(start, ret0, cret)
-)
+) (* end of [my_int_from] *)
 
 (* ****** ****** *)
 
@@ -151,17 +165,17 @@ end
 (* ****** ****** *)
 
 val
-mygen = sieve(my_int_from(2))
+thePrimes = sieve(my_int_from(2))
 
 (* ****** ****** *)
 
-val x0 = generator_next(mygen)
-val x1 = generator_next(mygen)
-val x2 = generator_next(mygen)
-val x3 = generator_next(mygen)
-val x4 = generator_next(mygen)
-val x5 = generator_next(mygen)
+val x0 = generator_next(thePrimes)
+val x1 = generator_next(thePrimes)
+val x2 = generator_next(thePrimes)
+val x3 = generator_next(thePrimes)
+val x4 = generator_next(thePrimes)
+val x5 = generator_next(thePrimes)
 
 (* ****** ****** *)
 
-(* end of [CS320-2023-Spring-assigns-generator.sml] *)
+(* End of [CS320-2023-Spring-lectures-generator.sml] *)
