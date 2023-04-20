@@ -20,9 +20,13 @@ use "./../../mysmlib/mysmlib-cls.sml";
 
 (* ****** ****** *)
 
-(*
+
 fun
-stream_drawdowns(fxs: int stream): int list stream = ... *)
+stream_drawdowns(fxs: int stream): int list stream = 
+
+
+
+
 
 (* ****** ****** *)
 

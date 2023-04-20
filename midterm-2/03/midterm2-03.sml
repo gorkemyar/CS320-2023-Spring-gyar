@@ -14,13 +14,30 @@ stream version of stream_ziplst (see Assign07-01).
 *)
 (* ****** ****** *)
 
-(*
+
 fun
 stream_zipstrm
 ( fxss
-: 'a stream stream): 'a stream stream = ...
-*)
+: 'a stream stream): 'a stream stream = 
+let 
 
+
+    fun helper(fxss): 'a stream = 
+    case fxss() of 
+    strcon_nil => strcon_nil
+    | strcon_cons(fxs, fxss) => 
+    fn() => 
+    case fxs() of
+    strcon_nil => strcon_nil
+    | strcon_cons(x, fxs) => fn() => strcon_cons(x, helper(stream_append(fxss, stream_cons(fxs, strcon_nil))))
+
+in
+    helper(fxss)
+end 
+
+
+(* use "midterm2-03.sml"; *)
+(* use "midterm2-03-test.sml"; *)
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm2-03.sml] *)

@@ -25,17 +25,50 @@ first n elements of fxs.
 
 (*
 fun
-stream_take
-(fxs: 'a stream, n: int): 'a stream = ...
+auxmain(i0, fxs): unit =
+(
+case fxs() of
+  strcon_nil => ()
+| strcon_cons(x1, fxs) =>
+  (iwork(i0, x1); auxmain(i0+1, fxs))
+)
+in
+  auxmain(0, fxs)
+
 *)
+
+
+fun
+stream_take
+(fxs: 'a stream, n: int): 'a stream =
+let 
+    val idx = ref 0
+    fun
+    helper(fxs) = fn() =>
+    if !idx >= n
+    then strcon_nil
+    else case fxs() of
+    strcon_nil => strcon_nil
+    | strcon_cons(x1, fxs) => (idx := !idx+1; strcon_cons(x1, helper(fxs)))
+in
+    helper(fxs)
+end
+
 
 (* ****** ****** *)
 
-(*
 fun
 stream_drop
-(fxs: 'a stream, n: int): 'a stream = ...
-*)
+(fxs: 'a stream, n: int): 'a stream = 
+stream_make_ifilter(fxs, fn(idx, x) => 
+if idx < n
+then false
+else true
+)
+
+
+
+(* use "midterm2-00.sml"; *)
 
 (* ****** ****** *)
 
