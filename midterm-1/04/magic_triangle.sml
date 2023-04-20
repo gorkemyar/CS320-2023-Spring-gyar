@@ -83,6 +83,39 @@ in
 end
 
 
+
+fun calc_pascal(n: int, i: int): int =
+let
+  val n_fact = int1_foldleft(n, 1, fn(r0,x0) => r0*(x0+1))
+  val div1 = int1_foldleft(i, n_fact, fn(r0, x0) => r0 div (x0+1))
+  val div2 = int1_foldleft(n-i, div1, fn(r0, x0) => r0 div (x0+1))
+in
+  div2
+end
+
+fun magic_triangle2(n :int): int list list =
+  list_reverse(int1_foldleft(n, [[1]], fn(r0, x0) => 
+    foreach_to_ifoldleft(list_foreach)(hd(r0), [1], fn(r1, idx, x1) => 
+        r1@[calc_pascal(x0+1, idx+1)]
+      )::r0))
+
+
+fun magic_triangle3(n :int): int list list =
+  list_reverse(int1_foldleft(n, [[1]], fn(r0, x0) => 
+    (foreach_to_ifoldleft(list_foreach)(hd(r0), [], fn(r1, idx, x1) => 
+        if idx = 0
+        then [1]
+        else r1@[x1+list_get_at(hd(r0), idx-1)]
+      )@[1])::r0))
+
+
+
+
+val a1 = magic_triangle(5)
+val a2 = magic_triangle2(5)
+val a3 = magic_triangle3(5)
+  
+
 (* use "magic_triangle.sml"; *)
 
 (* ****** ****** *)
