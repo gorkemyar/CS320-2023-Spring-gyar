@@ -26,7 +26,57 @@ w1 = abbcc and w2 = bbccd
 wordle_hint(w1, w2) =
 (2, b), (1, b), (2, c), (1, c), (0, d)
 """
+
+import sys
+####################################################
+sys.path.append('./../../../../mypylib')
+####################################################
+from mypylib_cls import *
+
 ########################################################################
 def wordle_hint(w1, w2):
-    raise NotImplementedError
+    memo = {}
+    res = []
+    for i in w1:
+        if i not in memo:
+            memo[i] = 1
+        else:
+            memo[i] += 1
+
+    for i in range(len(w2)):
+        if w2[i] == w1[i]:
+            res.append((1, w2[i]))
+            memo[w2[i]] -= 1
+            if memo[w2[i]] == 0:
+                del memo[w2[i]]
+        else:
+            res.append([0, w2[i]])
+    
+    for i in range(len(w2)):
+        if res[i][0] == 0 and w2[i] in memo:
+            if w2[i] in memo:
+                res[i][0] = 2
+                memo[w2[i]] -= 1
+                if memo[w2[i]] == 0:
+                    del memo[w2[i]]
+
+    for i in range(len(res)):
+        res[i] = tuple(res[i])    
+    return res
+
 ########################################################################
+
+# w1 = "water"  
+# w2 = "water"
+
+# print(wordle_hint(w1, w2))
+
+# w1 = "water"
+# w2 = "waste"
+
+# print(wordle_hint(w1, w2))
+
+# w1 = "abbcc"
+# w2 = "bbccd"
+
+# print(wordle_hint(w1, w2))
