@@ -38,7 +38,8 @@ perm_counting_out([1,2,3,4], 3) = [4,1,3,2]
 
 fun
 perm_counting_out
-(xs: int list, k0: int): int list = ...
+(xs: int list, k0: int): int list = 
+
 
 
 (* ****** ****** *)
