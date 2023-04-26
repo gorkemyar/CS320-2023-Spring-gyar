@@ -32,39 +32,62 @@ fun
 fgenerator_make_stream(fxs: 'a stream): 'a fgenerator = ...
 //
 *)
-exception EndList
 
 fun
 fgenerator_make_stream(fxs: 'a stream): 'a fgenerator = 
 generator_make_fun
 (
 fn
-(ret0: 'a cont ref, cret: unit cont ref) =>
-fgenerator_make_stream2(fxs, ret0, cret)
-)handle EndList => NONE
+(ret0: 'a option cont ref, cret: unit cont ref) =>
+(fgenerator_make_stream2(fxs, ret0, cret)): 'a option
+)
 
 and
 
-fgenerator_make_stream2(fxs: 'a stream, ret0: 'a cont ref, cret): 'a =
+fgenerator_make_stream2(fxs: 'a stream, 
+                        ret0: 'a option cont ref, 
+                        cret: unit cont ref): 'a option =
 case fxs() of
-strcon_nil => raise EndList
+strcon_nil => 
+    let 
+    val () = generator_yield(NONE, ret0, cret)
+    in
+    NONE
+    end
 | strcon_cons(x, fxs: 'a stream) =>
-let
+    let
+    val () = generator_yield(SOME(x), ret0, cret)
+    in
+    fgenerator_make_stream2(fxs, ret0, cret)
+    end 
 
-val () = generator_yield(x, ret0, cret)
-in
 
-fgenerator_make_stream2(fxs, ret0, cret)
-end 
-
-(* val plus1 = fn (a:int) => 
-(if a > 0 
-then SOME("asda")
-else NONE):string option
-
-val b = plus1 4
-val c = plus1 0 *)
+fun
+fgenerator_next(fgen) =
+(
+case generator_next(fgen) of
+  NONE =>
+  raise StopIteration | SOME(x1) => x1
+)
 
 (* ****** ****** *)
 
-(* end of [CS320-2023-Spring-assigns-assign09-02.sml] *)
+fun
+fgenerator_foreach
+(fgen: 'a fgenerator, work: 'a -> unit) =
+let
+fun
+loop(): unit =
+let
+val x1 =
+fgenerator_next(fgen) in work(x1); loop()
+end
+in
+  loop() handle StopIteration(*void*) => ()
+end
+
+(* ****** ****** *)
+
+
+
+

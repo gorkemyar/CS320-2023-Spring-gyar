@@ -82,7 +82,7 @@ def wordle_hint(w1, w2):
 # print(wordle_hint(w1, w2))
 
 
-# w1 = "abbaa"
-# w2 = "bbbbb"
+w1 = "apple"
+w2 = "paapp"
 
-# print(wordle_hint(w1, w2))
+print(wordle_hint(w1, w2))
