@@ -62,29 +62,6 @@ strcon_nil =>
     end 
 
 
-fun
-fgenerator_next(fgen) =
-(
-case generator_next(fgen) of
-  NONE =>
-  raise StopIteration | SOME(x1) => x1
-)
-
-(* ****** ****** *)
-
-fun
-fgenerator_foreach
-(fgen: 'a fgenerator, work: 'a -> unit) =
-let
-fun
-loop(): unit =
-let
-val x1 =
-fgenerator_next(fgen) in work(x1); loop()
-end
-in
-  loop() handle StopIteration(*void*) => ()
-end
 
 (* ****** ****** *)
 
