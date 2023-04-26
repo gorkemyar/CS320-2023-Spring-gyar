@@ -80,3 +80,9 @@ def wordle_hint(w1, w2):
 # w2 = "bbccd"
 
 # print(wordle_hint(w1, w2))
+
+
+# w1 = "abbaa"
+# w2 = "bbbbb"
+
+# print(wordle_hint(w1, w2))

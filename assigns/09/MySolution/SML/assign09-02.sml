@@ -32,9 +32,38 @@ fun
 fgenerator_make_stream(fxs: 'a stream): 'a fgenerator = ...
 //
 *)
+exception EndList
 
 fun
 fgenerator_make_stream(fxs: 'a stream): 'a fgenerator = 
+generator_make_fun
+(
+fn
+(ret0: 'a cont ref, cret: unit cont ref) =>
+fgenerator_make_stream2(fxs, ret0, cret)
+)handle EndList => NONE
+
+and
+
+fgenerator_make_stream2(fxs: 'a stream, ret0: 'a cont ref, cret): 'a =
+case fxs() of
+strcon_nil => raise EndList
+| strcon_cons(x, fxs: 'a stream) =>
+let
+
+val () = generator_yield(x, ret0, cret)
+in
+
+fgenerator_make_stream2(fxs, ret0, cret)
+end 
+
+(* val plus1 = fn (a:int) => 
+(if a > 0 
+then SOME("asda")
+else NONE):string option
+
+val b = plus1 4
+val c = plus1 0 *)
 
 (* ****** ****** *)
 

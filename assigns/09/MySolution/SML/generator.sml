@@ -7,6 +7,9 @@ open SMLofNJ.Cont
 exception StopIteration
 
 (* ****** ****** *)
+fun
+print_int
+(x: int) = print(Int.toString(x))
 
 type
 'a generator =
@@ -50,8 +53,8 @@ let
   val cret = ref(Unsafe.cast(NONE))
 in
   callcc
-  (fn cc0 =>
-   (callcc(fn cc1 =>
+  (fn (cc0: unit cont)=>
+   (callcc(fn (cc1: unit cont) =>
     (cret := cc1; throw cc0 ())); gfun(ret0, cret); ()));
   (ret0, cret)
 end
@@ -107,6 +110,8 @@ my_int_from2
 let
 val () =
 generator_yield(start, ret0, cret)
+
+
 in
   my_int_from2(start+1, ret0, cret)
 end
@@ -137,6 +142,7 @@ let
 (* ****** ****** *)
 val p1 = generator_next(gxs)
 val () = generator_yield(p1, ret0, cret)
+
 (* ****** ****** *)
 val gxs =
 generator_make_filter(gxs, fn x1 => x1 mod p1 > 0)
