@@ -16,12 +16,15 @@ import itertools
 ########################################################################
 def wordle_guess(hints):
     word = [" "] * len(hints[0])
+    none_char = set()
 
     def first_fill(word, hints):
         for i in range(len(hints)):
             for j in range(len(hints[i])):
                 if hints[i][j][0] == 1:
                     word[j] = hints[i][j][1]
+                elif hints[i][j][0] == 0:
+                    none_char.add(hints[i][j][1])
  
     def find_empty_spaces(word):
         res = []
@@ -62,7 +65,6 @@ def wordle_guess(hints):
     
         return True
 
-
     def fill_word(word, hints):
         if hints == []:
             return word
@@ -70,18 +72,12 @@ def wordle_guess(hints):
         hint = hints[0] 
         word_c = word[:]
 
-        #print("hint is", hint)
-        #print("word is", word_c)
-
         conditions = option2_match(word_c, hint)
         if conditions == None:
             return None
-
-        #print("bomb")
+        
         empty_space = find_empty_spaces(word_c)
 
-        #print("conditions is", conditions)
-        #print("empty_space is", empty_space)
         total_conditions = 0
         conditions_list = []
         for k in conditions:
@@ -104,9 +100,21 @@ def wordle_guess(hints):
         
         return None
     
+    def fill_empty(word):
+        ch = "-"
+        for i in range(26):
+            if chr(ord('a') + i) not in none_char:
+                ch = chr(ord('a') + i)
+                break
+        for i in range(len(word)):
+            if word[i] == " ":
+                word[i] = ch
+        return word
+    
     first_fill(word, hints)
-    print(word)
     word = fill_word(word, hints)
+    word = fill_empty(word)
+
 
     if word != None:
         return "".join(word)
@@ -115,8 +123,10 @@ def wordle_guess(hints):
             
 
             
-
-
+# myhint0 = [(0, 'a'), (2, 'i'), (0, 'b'), (0, 't'), (2, 'e'), (2, 'n')]
+# myhint = [myhint0]
+# res = wordle_guess(myhint)
+# print(res)
 # myhint0 = \
 #     [(0, 'l'), (2, 'i'), (0, 's'), (0, 't'), (2, 'e'), (2, 'n')]
 # myhint1 = \
@@ -134,6 +144,7 @@ def wordle_guess(hints):
 # myhints = \
 #     [myhint0, myhint1, myhint2, myhint3, myhint4, myhint5, myhint6]
 
+# print(wordle_guess(myhints))
 
 # myhint0 = [(2, 'l'), (2, 'i'), (2, 's'), (2, 't'), (2, 'e'), (2, 'n')]
 # myhint1 = [(2, 's'), (2, 'i'), (2, 'l'), (2, 'e'), (2, 'n'), (2, 't')]

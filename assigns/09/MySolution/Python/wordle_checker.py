@@ -53,12 +53,11 @@ def wordle_hint(w1, w2):
             res.append([0, w2[i]])
     
     for i in range(len(w2)):
-        if res[i][0] == 0 and w2[i] in memo:
-            if w2[i] in memo:
-                res[i][0] = 2
-                memo[w2[i]] -= 1
-                if memo[w2[i]] == 0:
-                    del memo[w2[i]]
+        if res[i][0] == 0 and w2[i] in memo:       
+            res[i][0] = 2
+            memo[w2[i]] -= 1
+            if memo[w2[i]] == 0:
+                del memo[w2[i]]
 
     for i in range(len(res)):
         res[i] = tuple(res[i])    
@@ -82,7 +81,7 @@ def wordle_hint(w1, w2):
 # print(wordle_hint(w1, w2))
 
 
-w1 = "apple"
-w2 = "paapp"
+# w1 = "apple"
+# w2 = "paapp"
 
-print(wordle_hint(w1, w2))
+# print(wordle_hint(w1, w2))
